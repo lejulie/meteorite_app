@@ -1,6 +1,4 @@
-# Meteorite visuatlization
-# Meteorite landing data from
-# https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh
+# Meteorite visuatlization - Server File
 
 server <- function(input, output, session){
 
