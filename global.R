@@ -4,30 +4,40 @@
 # Originally collected by http://www.meteoriticalsociety.org/ ?
 
 library(shiny)
-library(googleVis)
 library(leaflet)
-library(maps)
 library(shinydashboard)
+library(dplyr)
 
-#setwd("~/Desktop/NYCDSA/projects/shiny_project/nasa_data/")
+# Read the data
 meteorites = read.csv("./data/meteorite_landings.csv")
+
+# Update some column names
 names(meteorites)[names(meteorites) == 'reclat'] <- 'lat'
 names(meteorites)[names(meteorites) == 'reclong'] <- 'long'
 names(meteorites)[names(meteorites) == 'recclass'] <- 'class'
 names(meteorites)[names(meteorites) == 'mass..g.'] <- 'mass'
+
+# Convert mass and year to numerics
 meteorites$mass = as.numeric(meteorites$mass)
 meteorites$year = as.numeric(substr(meteorites$year, 7,10))
+
+# Remove any nonsense points and unnecessary columns
 meteorites = filter(meteorites, year < 2018)
+meteorites = filter(meteorites, long > -180 & long < 180)
+meteorites = filter(meteorites, lat > -90 & lat < 90)
 meteorites = select(meteorites, -GeoLocation)
 
 # remove points missing lat/lng
 scrubbed = meteorites[complete.cases(meteorites),]
 
 # take a subset to test with
-x = sample(1:nrow(scrubbed),5000,replace = FALSE) #random sample of 1000 rows
+x = sample(1:nrow(scrubbed),20000,replace = FALSE) #random sample of 10,000 rows
 subset = scrubbed[x,]
 
 
-# Meteorites with funy years
+# Meteorites with funny years
 # Ur-  https://www.lpi.usra.edu/meteor/metbull.php?sea=Ur&sfor=names&ants=&nwas=&falls=&valids=&stype=exact&lrec=50&map=ge&browse=&country=All&srt=name&categ=All&mblist=All&rect=&phot=&snew=0&pnt=Normal%20table&code=24125)
 # Northwest Africa 7701 - https://www.lpi.usra.edu/meteor/metbull.php?sea=Northwest+Africa+7701&sfor=names&ants=&nwas=&falls=&valids=&stype=contains&lrec=50&map=ge&browse=&country=All&srt=name&categ=All&mblist=All&rect=&phot=&snew=0&pnt=Normal%20table&code=57150
+#
+# Meteorites with out of bounds lat/lng
+# Meridiani Planum - https://www.lpi.usra.edu/meteor/metbull.php?sea=Meridiani+Planum&sfor=names&ants=&nwas=&falls=&valids=&stype=contains&lrec=50&map=ge&browse=&country=All&srt=name&categ=All&mblist=All&rect=&phot=&snew=0&pnt=Normal%20table&code=32789
