@@ -6,7 +6,7 @@ ui <- fluidPage(
   
   navbarPage("Meteorite Landings",
     
-    # Welcome Page
+    ##### Welcome Page #####
     tabPanel("Welcome!",
       tags$div(class = "header", checked = NA,
                tags$h1("Let's Talk About Meteorites"),
@@ -14,7 +14,7 @@ ui <- fluidPage(
       )
     ),
     
-    # Map
+    ##### Map ##### 
     tabPanel("Map Meteorites", 
        # Add a row for the map
        fluidRow(
@@ -42,14 +42,18 @@ ui <- fluidPage(
          column(3, selectInput("class", label = h3("Class"), 
                                choices = list("Choice 1" = 1, "Choice 2" = 2), 
                                selected = 1))
-       ) #close fluidrow
-       
+       ), #close fluidrow
+      
+       #Add an extra row for a testing widget
+       fluidRow(
+         column(4, textOutput("test_values"))
+       )
     ),
     
-    # Histograms and scatterplots
+    #####  Histograms and scatterplots #####
     tabPanel("Break it Down"),
 
-    # Table of raw data
+    #####  Table of raw data #####
     tabPanel("Raw Data")
 
   ) #close navbar layout

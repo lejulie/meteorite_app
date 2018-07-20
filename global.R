@@ -10,6 +10,10 @@ library(dplyr)
 
 # Read the data
 meteorites = read.csv("./data/meteorite_landings.csv")
+#backup = meteorites
+#meteorites = backup
+
+#####   DATA CLEANING - TO DO EXTERNALLY #####
 
 # Update some column names
 names(meteorites)[names(meteorites) == 'reclat'] <- 'lat'
@@ -25,19 +29,36 @@ meteorites$year = as.numeric(substr(meteorites$year, 7,10))
 meteorites = filter(meteorites, year < 2018)
 meteorites = filter(meteorites, long > -180 & long < 180)
 meteorites = filter(meteorites, lat > -90 & lat < 90)
-meteorites = select(meteorites, -GeoLocation)
+meteorites = mutate(meteorites, keep = ifelse(lat ==0 & long ==0, "drop", "keep"))
+meteorites = filter(meteorites, keep == "keep")
+meteorites = select(meteorites, -GeoLocation, -keep)
 
 # remove points missing lat/lng
-scrubbed = meteorites[complete.cases(meteorites),]
+meteorites = meteorites[complete.cases(meteorites),]
+
+##### GLOBAL VARS #####
+
+initial_zoom = 1
+max_cluster_zoom = 4
+circle_radius = 2
+
+##### NOTES #####
 
 # take a subset to test with
-x = sample(1:nrow(scrubbed),20000,replace = FALSE) #random sample of 10,000 rows
-subset = scrubbed[x,]
+# x = sample(1:nrow(meteorites),20000,replace = FALSE) #random sample of 10,000 rows
+# subset = meteorites[x,]
 
 
 # Meteorites with funny years
-# Ur-  https://www.lpi.usra.edu/meteor/metbull.php?sea=Ur&sfor=names&ants=&nwas=&falls=&valids=&stype=exact&lrec=50&map=ge&browse=&country=All&srt=name&categ=All&mblist=All&rect=&phot=&snew=0&pnt=Normal%20table&code=24125)
-# Northwest Africa 7701 - https://www.lpi.usra.edu/meteor/metbull.php?sea=Northwest+Africa+7701&sfor=names&ants=&nwas=&falls=&valids=&stype=contains&lrec=50&map=ge&browse=&country=All&srt=name&categ=All&mblist=All&rect=&phot=&snew=0&pnt=Normal%20table&code=57150
+# Ur-  https://www.lpi.usra.edu/meteor/metbull.php?sea=Ur&sfor=names&ants=&
+#nwas=&falls=&valids=&stype=exact&lrec=50&map=ge&browse=&country=All&srt=name&c
+#ateg=All&mblist=All&rect=&phot=&snew=0&pnt=Normal%20table&code=24125)
+# Northwest Africa 7701 - https://www.lpi.usra.edu/meteor/metbull.php?sea=Nort
+#hwest+Africa+7701&sfor=names&ants=&nwas=&falls=&valids=&stype=contains&lrec=50&
+#map=ge&browse=&country=All&srt=name&categ=All&mblist=All&rect=&phot=&snew=0&pnt=
+#Normal%20table&code=57150
 #
 # Meteorites with out of bounds lat/lng
-# Meridiani Planum - https://www.lpi.usra.edu/meteor/metbull.php?sea=Meridiani+Planum&sfor=names&ants=&nwas=&falls=&valids=&stype=contains&lrec=50&map=ge&browse=&country=All&srt=name&categ=All&mblist=All&rect=&phot=&snew=0&pnt=Normal%20table&code=32789
+# Meridiani Planum - https://www.lpi.usra.edu/meteor/metbull.php?sea=Meridiani+Planu
+#m&sfor=names&ants=&nwas=&falls=&valids=&stype=contains&lrec=50&map=ge&browse=&country
+#=All&srt=name&categ=All&mblist=All&rect=&phot=&snew=0&pnt=Normal%20table&code=32789
