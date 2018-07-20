@@ -42,6 +42,11 @@ initial_zoom = 1
 max_cluster_zoom = 4
 circle_radius = 2
 class_list_1 = c("Any", as.vector(unique(meteorites$class[order(meteorites$class)])))
+class_list_top_50 = meteorites %>% 
+  group_by(., class) %>% 
+  summarise(., count = n()) %>%
+  arrange(., desc(count))
+class_list_top_50 = class_list_top_50$class[1:50]
 
 ##### NOTES #####
 

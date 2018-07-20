@@ -51,7 +51,26 @@ ui <- fluidPage(
     ),
     
     #####  Histograms and scatterplots #####
-    tabPanel("Break it Down"),
+    tabPanel("Break it Down",
+       fluidRow(
+         column(12,
+                plotOutput("histogram")
+         )
+       ),
+       
+       br(),
+       
+       # Add a row for the widgets
+       fluidRow(
+         column(3, selectInput("hist_choice", label = h3("Choose Variable to Plot"), 
+                               choices = list("Mass (g)", 
+                                              "Year",
+                                              "Fell/Found",
+                                              "Class"), 
+                               selected = "Mass (g)")
+         )
+       )
+    ), # close break it down panel
 
     #####  Table of raw data #####
     tabPanel("Raw Data",

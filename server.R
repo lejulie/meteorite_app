@@ -54,7 +54,6 @@ server = function(input, output, session){
       addLegend("bottomright", pal = factpal, values = ~fall, title = "Fall Status",
                 opacity = 1) %>%
       setView(zoom = initial_zoom, 0, 0)
-      #fitBounds(lng1 = -180, lat1 = -88, lng2 = 180, lat2 = 82)
   })
   
   # Test text box
@@ -83,6 +82,29 @@ server = function(input, output, session){
                 title = "Fall Status",
                 opacity = 1)
   })
+  
+  ##### FOR BREAK IT DOWN #####
+  
+  hist_var = reactive({
+    switch(input$hist_choice,
+           # x, binwidth, stat, x axis
+           "Mass (g)" = list(meteorites, meteorites$mass, 130, "count", "Mass (g)"),
+           "Year" = list(meteorites, meteorites$year, 30, "count", "Year"),
+           "Fell/Found" = list(meteorites, meteorites$fall, NULL, "count", 
+                               "Fell/Found"),
+           "Class" = list(meteorites[meteorites$class %in% class_list_top_50,], 
+                          meteorites[meteorites$class %in% class_list_top_50,]$class,
+                          NULL, "count", "Top 50 Classes")
+           )
+  })
+  
+  output$histogram = renderPlot(
+    ggplot(data = hist_var()[[1]], aes(x = hist_var()[[2]])) +
+      geom_bar(binwidth = hist_var()[[3]], stat = hist_var()[[4]]) + 
+      xlab(hist_var()[[5]]) +
+      ylab("Count") +
+      theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  )
   
   ##### FOR DATA TABLE #####
   
