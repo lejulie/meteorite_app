@@ -1,11 +1,11 @@
 # Meteorite visuatlization - Server File
 
-server <- function(input, output, session){
+server = function(input, output, session){
 
-  ######################### FOR MAPS #########################
+  ##### FOR MAPS #####
   
   # Reactive expression for widgets
-  filtered.data <- reactive({
+  filtered.data = reactive({
     fell_found = switch(input$fall_found,
            "Fell or Found" = c("Fell", "Found"),
            "Fell Only" = "Fell",
@@ -30,15 +30,15 @@ server <- function(input, output, session){
     }
   })
   
-  class_list <- reactive({
+  class_list = reactive({
     unique(meteorites$class)
   })
   
   # Color palette
-  factpal <- colorFactor(c("red","blue"), c("Fell","Found"))
+  factpal = colorFactor(c("red","blue"), c("Fell","Found"))
   
   # Map
-  output$mymap <- renderLeaflet({
+  output$mymap = renderLeaflet({
     leaflet(data = meteorites) %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
       addCircleMarkers(
@@ -58,7 +58,7 @@ server <- function(input, output, session){
   })
   
   # Test text box
-  output$test_values <- renderText({
+  output$test_values = renderText({
     invisible(paste("Fell:", nrow(filtered.data()[filtered.data()$fall == "Fell",]),
                     "Found:", nrow(filtered.data()[filtered.data()$fall == "Found",]),
                     "Total:", nrow(filtered.data())))
@@ -83,5 +83,9 @@ server <- function(input, output, session){
                 title = "Fall Status",
                 opacity = 1)
   })
+  
+  ##### FOR DATA TABLE #####
+  
+  output$raw_table = DT::renderDataTable({ meteorites })
   
 }

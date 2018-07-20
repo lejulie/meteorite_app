@@ -54,7 +54,9 @@ ui <- fluidPage(
     tabPanel("Break it Down"),
 
     #####  Table of raw data #####
-    tabPanel("Raw Data")
+    tabPanel("Raw Data",
+      DT::dataTableOutput("raw_table")
+             )
 
   ) #close navbar layout
   

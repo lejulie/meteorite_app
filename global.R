@@ -5,7 +5,7 @@
 
 library(shiny)
 library(leaflet)
-library(shinydashboard)
+library(DT)
 library(dplyr)
 
 # Read the data
