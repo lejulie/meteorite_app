@@ -85,14 +85,15 @@ server = function(input, output, session){
   
   ##### FOR DATA TABLE #####
   
-  output$raw_table = DT::renderDataTable({ select(meteorites, -lat, -long)},colnames = 
+  output$raw_table = DT::renderDataTable({ select(meteorites, -lat, -long)},
+                                         colnames = 
         c('Name', 'ID', 'Class', 'Mass', 'Fall or Found', 'Year',
           'Latitude', 'Longitude'), 
         options = list(pageLength = 15,
         columnDefs = list(list(className = 'dt-right', targets = 7:8),
                           list(className = 'dt-left', targets = 2))))
  
-  ##### FOR BETTER PLOTS #####
+  ##### FOR PLOTS #####
   
   # Mass
   m_data = reactive({
@@ -125,7 +126,8 @@ server = function(input, output, session){
 
     p %>%
       config(displayModeBar = F, showLink = F) %>%
-      layout(showlegend = F, barmode = "overlay", yaxis = list(title = "Count"),
+      layout(showlegend = F, barmode = "overlay", yaxis = 
+               list(title = "Count"),
              xaxis = (list(title = "Mass (g)", showticklabels = T)))
   })
   
@@ -163,6 +165,15 @@ server = function(input, output, session){
       layout(showlegend = F, barmode = "overlay", yaxis = list(title = "Count"),
              xaxis = (list(title = "Year", showticklabels = T)))
   })
+  
+  # Class
+  output$c_table = DT::renderDataTable({ c_summary },colnames = 
+        c("Class", "Average Mass (g)", "Count Fell","Count Found",
+          "Total Count", "Percent of All Meteorites"), 
+        options = list(pageLength = 15,
+        columnDefs = list(list(className = 'dt-right', targets = c(2)))))
+  
+  
 }
 
 

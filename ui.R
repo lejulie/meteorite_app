@@ -193,11 +193,15 @@ ui <- fluidPage(
        tabPanel("Class",
                 # H1
                 tags$div(class = "header", checked = NA,
-                         tags$h1("Meteorite Classes"))
+                         tags$h1("Meteorite Classes")),
+                # Table
+                DT::dataTableOutput("c_table")
                 )
+       
+                
        ), # close break it down panel
 
-  #####  Table of raw data #####
+    #####  Table of raw data #####
     tabPanel("Raw Data", 
              tags$div(class = "header", checked = NA,
                       tags$h1("Raw Data")),
