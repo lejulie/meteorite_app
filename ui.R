@@ -83,8 +83,7 @@ ui <- fluidPage(
                 'here.'),'  The data is originated from ',tags$a(href=
                 'http://meteoriticalsociety.org/','The Meteoritical Society.')),
           tags$p('This app was built using the ',tags$a(href=
-                'https://shiny.rstudio.com/','Shiny package'),' for R.  Check out the 
-                code on ',tags$a(href='https://github.com/lejulie/','github.')),
+                'https://shiny.rstudio.com/','Shiny package'),' for R.'),
 
          # Who are you?
          tags$h2('Who are you?'),

@@ -1,0 +1,13 @@
+name: meteorite_app
+title: meteorite_app
+username:
+account: lejulie
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 384938
+bundleId: 1491779
+url: https://lejulie.shinyapps.io/meteorite_app/
+when: 1532107065.84152
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: classes.csv|data/cleaned_meteorites_old.csv|data/meteorite_landings.csv
