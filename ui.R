@@ -137,31 +137,29 @@ ui <- fluidPage(
     ),
     
     #####  Histograms and scatterplots #####
-    tabPanel("Break it Down",
-       fluidRow(
-         column(12,
-                plotOutput("histogram")
-         )
-       ),
-       
-       br(),
-       
-       # Add a row for the widgets
-       fluidRow(
-         column(3, selectInput("hist_choice", label = h3("Choose Variable to Plot"), 
-                               choices = list("Mass (g)", 
-                                              "Year",
-                                              "Fell/Found",
-                                              "Class"), 
-                               selected = "Mass (g)")
-         )
-       )
-    ), # close break it down panel
+    navbarMenu("Break it Down",
+       tabPanel("Mass",
+                htmltools::div(style = "display:inline-block", 
+                               plotlyOutput("m_plot", width = "auto", height = 
+                                              "auto")),
+                column(5, sliderInput("m_year", label = h3("Year"), min = 300, 
+                                      max = 2013, value = c(300, 2013))),
+                
+                column(3, radioButtons("m_ff", label = h3("Fell or Found"),
+                                       choices = list("Fell or Found",
+                                                      "Fell Only",
+                                                      "Found Only"), 
+                                       selected = "Fell or Found")),
+                
+                column(4, selectInput("m_class", label = h3("Class"), 
+                                      choices = class_list_1, 
+                                      selected = 1))
+                ),
+       tabPanel("Year"),
+       tabPanel("Class")), # close break it down panel
 
-    #####  Table of raw data #####
-    tabPanel("Raw Data",
-      DT::dataTableOutput("raw_table")
-             )
+  #####  Table of raw data #####
+    tabPanel("Raw Data", DT::dataTableOutput("raw_table"))
 
   ) #close navbar layout
   

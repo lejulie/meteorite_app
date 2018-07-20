@@ -7,10 +7,12 @@ library(shiny)
 library(leaflet)
 library(DT)
 library(dplyr)
+library(googleVis)
+library(plotly)
 
 # Read the data
 meteorites = read.csv("./data/cleaned_meteorites.csv")
-meteorites = select(meteorites, -X)
+meteorites = select(meteorites, -X, -nametype)
 meteorites$lat_pretty = format(round(meteorites$lat, 3), nsmall=3)
 meteorites$long_pretty = format(round(meteorites$long, 3), nsmall=3)
 
@@ -25,3 +27,4 @@ class_list_top_50 = meteorites %>%
   summarise(., count = n()) %>%
   arrange(., desc(count))
 class_list_top_50 = class_list_top_50$class[1:50]
+
