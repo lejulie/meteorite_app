@@ -11,9 +11,27 @@ server <- function(input, output, session){
            "Fell Only" = "Fell",
            "Found Only" = "Found")
     
-    filter(meteorites, fall %in% fell_found, 
-           mass >= input$mass_range[1], 
-           mass <= input$mass_range[2])
+    if(input$class == "Any"){
+      filter(meteorites, 
+             fall %in% fell_found, 
+             mass >= input$mass_range[1], 
+             mass <= input$mass_range[2],
+             year >= input$year_range[1],
+             year <= input$year_range[2])
+    }
+    else{
+      filter(meteorites, 
+             fall %in% fell_found, 
+             mass >= input$mass_range[1], 
+             mass <= input$mass_range[2],
+             year >= input$year_range[1],
+             year <= input$year_range[2],
+             class == input$class)
+    }
+  })
+  
+  class_list <- reactive({
+    unique(meteorites$class)
   })
   
   # Color palette
@@ -41,13 +59,13 @@ server <- function(input, output, session){
   
   # Test text box
   output$test_values <- renderText({
-    invisible(paste("Fell:",nrow(filtered.data()[filtered.data()$fall == "Fell",]),
-                    "Found:",nrow(filtered.data()[filtered.data()$fall == "Found",])))
+    invisible(paste("Fell:", nrow(filtered.data()[filtered.data()$fall == "Fell",]),
+                    "Found:", nrow(filtered.data()[filtered.data()$fall == "Found",]),
+                    "Total:", nrow(filtered.data())))
   })
   
   # Observer for widget changes
   observe({
-    print(paste("rows: ",nrow(filtered.data())))
     leafletProxy("mymap", data = filtered.data()) %>%
       clearMarkerClusters() %>%      # remove the existing clusters
       clearControls() %>%            # remove the exisitng legend

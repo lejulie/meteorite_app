@@ -28,7 +28,7 @@ ui <- fluidPage(
        # Add a row for the widgets
        fluidRow(
          column(3, sliderInput("mass_range", label = h3("Mass (g)"), min = 0, 
-                               max = 13000, value = c(2500, 9000))),
+                               max = 13000, value = c(0, 13000))),
          
          column(3, sliderInput("year_range", label = h3("Year"), min = 300, 
                                max = 2013, value = c(300, 2013))),
@@ -40,7 +40,7 @@ ui <- fluidPage(
                                 selected = "Fell or Found")),
          
          column(3, selectInput("class", label = h3("Class"), 
-                               choices = list("Choice 1" = 1, "Choice 2" = 2), 
+                               choices = class_list_1, 
                                selected = 1))
        ), #close fluidrow
       

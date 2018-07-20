@@ -41,6 +41,7 @@ meteorites = meteorites[complete.cases(meteorites),]
 initial_zoom = 1
 max_cluster_zoom = 4
 circle_radius = 2
+class_list_1 = c("Any", as.vector(unique(meteorites$class[order(meteorites$class)])))
 
 ##### NOTES #####
 
