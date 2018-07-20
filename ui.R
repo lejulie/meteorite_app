@@ -102,6 +102,9 @@ ui <- fluidPage(
     
     ##### Map ##### 
     tabPanel("Map Meteorites", 
+       # H1
+       tags$div(class = "header", checked = NA,
+                tags$h1("Where Have Meteorites Been Found?")),
        # Add a row for the map
        fluidRow(
          column(12,
@@ -138,10 +141,19 @@ ui <- fluidPage(
     
     #####  Histograms and scatterplots #####
     navbarMenu("Break it Down",
+       
+       # Mass
        tabPanel("Mass",
+                # H1
+                tags$div(class = "header", checked = NA,
+                         tags$h1("Mass Histogram")),
+                
+                # Plot
                 htmltools::div(style = "display:inline-block", 
                                plotlyOutput("m_plot", width = "auto", height = 
                                               "auto")),
+                
+                # Widgets
                 column(5, sliderInput("m_year", label = h3("Year"), min = 300, 
                                       max = 2013, value = c(300, 2013))),
                 
@@ -155,11 +167,41 @@ ui <- fluidPage(
                                       choices = class_list_1, 
                                       selected = 1))
                 ),
-       tabPanel("Year"),
-       tabPanel("Class")), # close break it down panel
+       # Year
+       tabPanel("Year",
+                # H1
+                tags$div(class = "header", checked = NA,
+                         tags$h1("Year Histogram")),
+                htmltools::div(style = "display:inline-block", 
+                               plotlyOutput("y_plot", width = "auto", height = 
+                                              "auto")),
+                column(5, sliderInput("y_mass", label = h3("Mass (g)"), min = 0, 
+                                      max = 13000, value = c(0, 13000))),
+
+                column(3, radioButtons("y_ff", label = h3("Fell or Found"),
+                                       choices = list("Fell or Found",
+                                                      "Fell Only",
+                                                      "Found Only"), 
+                                       selected = "Fell or Found")),
+                
+                column(4, selectInput("y_class", label = h3("Class"), 
+                                      choices = class_list_1, 
+                                      selected = 1))
+                ),
+       
+       # Class
+       tabPanel("Class",
+                # H1
+                tags$div(class = "header", checked = NA,
+                         tags$h1("Meteorite Classes"))
+                )
+       ), # close break it down panel
 
   #####  Table of raw data #####
-    tabPanel("Raw Data", DT::dataTableOutput("raw_table"))
+    tabPanel("Raw Data", 
+             tags$div(class = "header", checked = NA,
+                      tags$h1("Raw Data")),
+             DT::dataTableOutput("raw_table"))
 
   ) #close navbar layout
   
