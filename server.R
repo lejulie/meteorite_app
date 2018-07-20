@@ -13,8 +13,7 @@ server = function(input, output, session){
              mass >= input$mass_range[1], 
              mass <= input$mass_range[2],
              year >= input$year_range[1],
-             year <= input$year_range[2])
-    }
+             year <= input$year_range[2])}
     else{
       filter(meteorites, 
              fall %in% f_switch(input$fall_found), 
@@ -22,8 +21,7 @@ server = function(input, output, session){
              mass <= input$mass_range[2],
              year >= input$year_range[1],
              year <= input$year_range[2],
-             class == input$class)
-    }
+             class == input$class)}
   })
   
   observe({
@@ -39,7 +37,6 @@ server = function(input, output, session){
         choices = class_list,
         selected = class_list[1])
   })
-  
   
   # Color palette
   factpal = colorFactor(c("red","blue"), c("Fell","Found"))
@@ -64,7 +61,7 @@ server = function(input, output, session){
       setView(zoom = initial_zoom, 0, 0)
   })
   
-  # Test text box
+  # Counts
   output$test_values = renderText({
     invisible(paste("Fell:", nrow(filtered.data()[filtered.data()$fall == 
                                                     "Fell",]),
@@ -113,16 +110,14 @@ server = function(input, output, session){
              fall %in% f_switch(input$m_ff),
              year >= input$m_year[1],
              year <= input$m_year[2]) %>%
-        select(., mass, fall)
-    }
+        select(., mass, fall)}
     else{
       filter(meteorites, 
              fall %in% f_switch(input$m_ff), 
              year >= input$m_year[1],
              year <= input$m_year[2],
              class == input$m_class) %>%
-        select(., mass, fall)
-    }
+        select(., mass, fall)}
   })
   
   output$m_plot <- renderPlotly({
@@ -135,6 +130,18 @@ server = function(input, output, session){
       layout(showlegend = F, barmode = "overlay", yaxis = 
                list(title = "Count"),
              xaxis = (list(title = "Mass (g)", showticklabels = T)))
+  })
+  
+  observe({
+    sub = filter(meteorites, 
+                 fall %in% f_switch(input$m_ff), 
+                 year >= input$m_year[1],
+                 year <= input$m_year[2])
+    class_list = c("Any", as.vector(unique(sub$class[order(sub$class)])))
+    updateSelectInput(
+      session, "m_class",
+      choices = class_list,
+      selected = class_list[1])
   })
   
   # Year
@@ -166,6 +173,18 @@ server = function(input, output, session){
       config(displayModeBar = F, showLink = F) %>%
       layout(showlegend = F, barmode = "overlay", yaxis = list(title = "Count"),
              xaxis = (list(title = "Year", showticklabels = T)))
+  })
+  
+  observe({
+    sub = filter(meteorites, 
+                 fall %in% f_switch(input$y_ff), 
+                 mass >= input$y_mass[1],
+                 mass <= input$y_mass[2])
+    class_list = c("Any", as.vector(unique(sub$class[order(sub$class)])))
+    updateSelectInput(
+      session, "y_class",
+      choices = class_list,
+      selected = class_list[1])
   })
   
   # Class

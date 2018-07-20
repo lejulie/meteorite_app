@@ -5,9 +5,9 @@ account: lejulie
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 384938
-bundleId: 1492211
+bundleId: 1492295
 url: https://lejulie.shinyapps.io/meteorite_app/
-when: 1532120852.6139
+when: 1532123659.74611
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: classes.csv|data/cleaned_meteorites_old.csv|data/meteorite_landings.csv

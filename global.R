@@ -39,18 +39,6 @@ f_switch = function(value){
          "Found Only" = "Found")
   return(opt)
 }
-
-# c_avg_mass = meteorites %>% group_by(class) %>% summarise(avg_mass = mean(mass))
-# c_fell_found = meteorites %>% 
-#   group_by(class, fall) %>% 
-#   summarise(count = n()) %>%
-#   spread(key = fall, value = count)
-# c_summary = merge(c_avg_mass, c_fell_found)
-# c_summary[is.na(c_summary)] = 0
-# c_summary$avg_mass = round(c_summary$avg_mass,0)
-# c_total = sum(c_summary$Fell) + sum(c_summary$Found)
-# c_summary$total_row = c_summary$Fell + c_summary$Found
-# c_summary$pct_of_all = round(c_summary$total_row/c_total*100,3)
   
   
   

@@ -147,49 +147,45 @@ ui <- fluidPage(
                 # H1
                 tags$div(class = "header", checked = NA,
                          tags$h1("Mass Histogram")),
-                
-                # Plot
+              
                 fluidRow(
-                htmltools::div(style = "display:inline-block", 
-                               plotlyOutput("m_plot", width = "auto", height = 
-                                              "auto"))),
-                
                 # Widgets
-                column(5, sliderInput("m_year", label = h3("Year"), min = 300, 
-                                      max = 2013, value = c(300, 2013))),
-                
-                column(3, radioButtons("m_ff", label = h3("Fell or Found"),
-                                       choices = list("Fell or Found",
-                                                      "Fell Only",
+                column(4,
+                       selectInput("m_class", label = h3("Class"), choices = 
+                                     class_list_1, selected = 1),
+                       sliderInput("m_year", label = h3("Year"), min = 300, 
+                                      max = 2013, value = c(300, 2013)),
+                       radioButtons("m_ff", label = h3("Fell or Found"),
+                                       choices = list("Fell or Found", "Fell Only",
                                                       "Found Only"), 
-                                       selected = "Fell or Found")),
-                
-                column(4, selectInput("m_class", label = h3("Class"), 
-                                      choices = class_list_1, 
-                                      selected = 1))
-                ),
+                                       selected = "Fell or Found")
+                       ), #close column
+                #Plot
+                column(8, htmltools::div(style = "display:inline-block",
+                                         plotlyOutput("m_plot", width = "auto", 
+                                                      height = "auto"))))
+                ), #close column
+
        # Year
        tabPanel("Year",
                 # H1
                 tags$div(class = "header", checked = NA,
                          tags$h1("Year Histogram")),
                 fluidRow(
-                  htmltools::div(style = "display:inline-block", 
+                column(4,
+                       sliderInput("y_mass", label = h3("Mass (g)"), min = 0, 
+                                  max = 13000, value = c(0, 13000)),
+                       radioButtons("y_ff", label = h3("Fell or Found"),
+                                    choices = list("Fell or Found",
+                                                   "Fell Only",
+                                                   "Found Only"), 
+                                    selected = "Fell or Found"),
+                       selectInput("y_class", label = h3("Class"), 
+                                   choices = class_list_1, 
+                                   selected = 1)),
+                column(8,htmltools::div(style = "display:inline-block", 
                                plotlyOutput("y_plot", width = "auto", height = 
-                                              "auto"))),
-                column(5, sliderInput("y_mass", label = h3("Mass (g)"), min = 0, 
-                                      max = 13000, value = c(0, 13000))),
-
-                column(3, radioButtons("y_ff", label = h3("Fell or Found"),
-                                       choices = list("Fell or Found",
-                                                      "Fell Only",
-                                                      "Found Only"), 
-                                       selected = "Fell or Found")),
-                
-                column(4, selectInput("y_class", label = h3("Class"), 
-                                      choices = class_list_1, 
-                                      selected = 1))
-                ),
+                                              "auto"))))),
        
        # Class
        tabPanel("Class",
