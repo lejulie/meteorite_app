@@ -16,6 +16,9 @@ meteorites = select(meteorites, -X, -nametype)
 meteorites$lat_pretty = format(round(meteorites$lat, 3), nsmall=3)
 meteorites$long_pretty = format(round(meteorites$long, 3), nsmall=3)
 
+c_summary = read.csv("./data/class_summary_table.csv")
+c_summary = select(c_summary, -X)
+
 ##### GLOBAL VARS #####
 
 initial_zoom = 1
@@ -28,17 +31,26 @@ class_list_top_50 = meteorites %>%
   arrange(., desc(count))
 class_list_top_50 = class_list_top_50$class[1:50]
 
-c_avg_mass = meteorites %>% group_by(class) %>% summarise(avg_mass = mean(mass))
-c_fell_found = meteorites %>% 
-  group_by(class, fall) %>% 
-  summarise(count = n()) %>%
-  spread(key = fall, value = count)
-c_summary = merge(c_avg_mass, c_fell_found)
-c_summary[is.na(c_summary)] = 0
-c_summary$avg_mass = round(c_summary$avg_mass,0)
-c_total = sum(c_summary$Fell) + sum(c_summary$Found)
-c_summary$total_row = c_summary$Fell + c_summary$Found
-c_summary$pct_of_all = round(c_summary$total_row/c_total*100,3)
+##### GLOBAL FUNCTIONS #####
+f_switch = function(value){
+  opt = switch(value,
+         "Fell or Found" = c("Fell", "Found"),
+         "Fell Only" = "Fell",
+         "Found Only" = "Found")
+  return(opt)
+}
+
+# c_avg_mass = meteorites %>% group_by(class) %>% summarise(avg_mass = mean(mass))
+# c_fell_found = meteorites %>% 
+#   group_by(class, fall) %>% 
+#   summarise(count = n()) %>%
+#   spread(key = fall, value = count)
+# c_summary = merge(c_avg_mass, c_fell_found)
+# c_summary[is.na(c_summary)] = 0
+# c_summary$avg_mass = round(c_summary$avg_mass,0)
+# c_total = sum(c_summary$Fell) + sum(c_summary$Found)
+# c_summary$total_row = c_summary$Fell + c_summary$Found
+# c_summary$pct_of_all = round(c_summary$total_row/c_total*100,3)
   
   
   

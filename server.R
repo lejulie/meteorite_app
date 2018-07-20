@@ -6,14 +6,10 @@ server = function(input, output, session){
   
   # Reactive expression for widgets
   filtered.data = reactive({
-    fell_found = switch(input$fall_found,
-           "Fell or Found" = c("Fell", "Found"),
-           "Fell Only" = "Fell",
-           "Found Only" = "Found")
     
     if(input$class == "Any"){
       filter(meteorites, 
-             fall %in% fell_found, 
+             fall %in% f_switch(input$fall_found), 
              mass >= input$mass_range[1], 
              mass <= input$mass_range[2],
              year >= input$year_range[1],
@@ -21,7 +17,7 @@ server = function(input, output, session){
     }
     else{
       filter(meteorites, 
-             fall %in% fell_found, 
+             fall %in% f_switch(input$fall_found), 
              mass >= input$mass_range[1], 
              mass <= input$mass_range[2],
              year >= input$year_range[1],
@@ -30,9 +26,20 @@ server = function(input, output, session){
     }
   })
   
-  class_list = reactive({
-    unique(meteorites$class)
+  observe({
+      sub = filter(meteorites, 
+                   fall %in% f_switch(input$fall_found), 
+                   mass >= input$mass_range[1], 
+                   mass <= input$mass_range[2],
+                   year >= input$year_range[1],
+                   year <= input$year_range[2])
+      class_list = c("Any", as.vector(unique(sub$class[order(sub$class)])))
+      updateSelectInput(
+        session, "class",
+        choices = class_list,
+        selected = class_list[1])
   })
+  
   
   # Color palette
   factpal = colorFactor(c("red","blue"), c("Fell","Found"))
@@ -51,15 +58,18 @@ server = function(input, output, session){
         clusterOptions = markerClusterOptions(disableClusteringAtZoom = 
                                                 max_cluster_zoom,
                                               spiderfyOnMaxZoom = FALSE)) %>%
-      addLegend("bottomright", pal = factpal, values = ~fall, title = "Fall Status",
+      addLegend("bottomright", pal = factpal, values = ~fall, title = 
+                  "Fall Status",
                 opacity = 1) %>%
       setView(zoom = initial_zoom, 0, 0)
   })
   
   # Test text box
   output$test_values = renderText({
-    invisible(paste("Fell:", nrow(filtered.data()[filtered.data()$fall == "Fell",]),
-                    "Found:", nrow(filtered.data()[filtered.data()$fall == "Found",]),
+    invisible(paste("Fell:", nrow(filtered.data()[filtered.data()$fall == 
+                                                    "Fell",]),
+                    "Found:", nrow(filtered.data()[filtered.data()$fall == 
+                                                     "Found",]),
                     "Total:", nrow(filtered.data())))
   })
   
@@ -97,21 +107,17 @@ server = function(input, output, session){
   
   # Mass
   m_data = reactive({
-    fell_found = switch(input$m_ff,
-                        "Fell or Found" = c("Fell", "Found"),
-                        "Fell Only" = "Fell",
-                        "Found Only" = "Found")
     
     if(input$m_class == "Any"){
       filter(meteorites, 
-             fall %in% fell_found,
+             fall %in% f_switch(input$m_ff),
              year >= input$m_year[1],
              year <= input$m_year[2]) %>%
         select(., mass, fall)
     }
     else{
       filter(meteorites, 
-             fall %in% fell_found, 
+             fall %in% f_switch(input$m_ff), 
              year >= input$m_year[1],
              year <= input$m_year[2],
              class == input$m_class) %>%
@@ -133,21 +139,17 @@ server = function(input, output, session){
   
   # Year
   y_data = reactive({
-    fell_found = switch(input$y_ff,
-                        "Fell or Found" = c("Fell", "Found"),
-                        "Fell Only" = "Fell",
-                        "Found Only" = "Found")
     
     if(input$y_class == "Any"){
       filter(meteorites, 
-             fall %in% fell_found,
+             fall %in% f_switch(input$y_ff),
              mass >= input$y_mass[1],
              mass <= input$y_mass[2]) %>%
         select(., year, fall)
     }
     else{
       filter(meteorites, 
-             fall %in% fell_found, 
+             fall %in% f_switch(input$y_ff), 
              mass >= input$y_mass[1],
              mass <= input$y_mass[2],
              class == input$y_class) %>%
@@ -172,7 +174,6 @@ server = function(input, output, session){
           "Total Count", "Percent of All Meteorites"), 
         options = list(pageLength = 15,
         columnDefs = list(list(className = 'dt-right', targets = c(2)))))
-  
   
 }
 

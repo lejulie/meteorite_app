@@ -149,9 +149,10 @@ ui <- fluidPage(
                          tags$h1("Mass Histogram")),
                 
                 # Plot
+                fluidRow(
                 htmltools::div(style = "display:inline-block", 
                                plotlyOutput("m_plot", width = "auto", height = 
-                                              "auto")),
+                                              "auto"))),
                 
                 # Widgets
                 column(5, sliderInput("m_year", label = h3("Year"), min = 300, 
@@ -172,9 +173,10 @@ ui <- fluidPage(
                 # H1
                 tags$div(class = "header", checked = NA,
                          tags$h1("Year Histogram")),
-                htmltools::div(style = "display:inline-block", 
+                fluidRow(
+                  htmltools::div(style = "display:inline-block", 
                                plotlyOutput("y_plot", width = "auto", height = 
-                                              "auto")),
+                                              "auto"))),
                 column(5, sliderInput("y_mass", label = h3("Mass (g)"), min = 0, 
                                       max = 13000, value = c(0, 13000))),
 
