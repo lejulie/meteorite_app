@@ -10,6 +10,10 @@ library(dplyr)
 
 # Read the data
 meteorites = read.csv("./data/cleaned_meteorites.csv")
+meteorites = select(meteorites, -X)
+meteorites$lat_pretty = format(round(meteorites$lat, 3), nsmall=3)
+meteorites$long_pretty = format(round(meteorites$long, 3), nsmall=3)
+
 #backup = meteorites
 #meteorites = backup
 
