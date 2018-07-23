@@ -51,12 +51,9 @@ server = function(input, output, session){
         color = ~factpal(fall),
         stroke = FALSE,
         fillOpacity = 0.5,
-        clusterOptions = markerClusterOptions(disableClusteringAtZoom = 
+        clusterOptions = markerClusterOptions(disableClusteringAtZoom =
                                                 max_cluster_zoom,
                                               spiderfyOnMaxZoom = FALSE)) %>%
-      # addLegend("bottomright", pal = factpal, values = ~fall, title = 
-      #             "Fall Status",
-      #           opacity = 1) %>%
       setView(zoom = initial_zoom, 0, 0)
   })
   
@@ -69,11 +66,10 @@ server = function(input, output, session){
                     "Total:", nrow(filtered.data())))
   })
   
-  # Observer for widget changes
-  observe({
+  redraw = function(){
     map = leafletProxy("mymap", data = filtered.data()) %>%
-      clearMarkerClusters() %>%      # remove the existing clusters
       clearControls() %>%            # remove the exisitng legend
+      clearMarkerClusters() %>%      # remove the existing clusters
       addCircleMarkers(              # add markers
         lng=filtered.data()$long,
         lat=filtered.data()$lat,
@@ -81,40 +77,46 @@ server = function(input, output, session){
         color = ~factpal(fall),
         stroke = FALSE,
         fillOpacity = 0.5,
-        clusterOptions = markerClusterOptions(disableClusteringAtZoom = 
+        clusterOptions = markerClusterOptions(disableClusteringAtZoom =
                                                 max_cluster_zoom,
                                               spiderfyOnMaxZoom = FALSE))
-    zoom = input$mymap_zoom
-    print(zoom)
-    #print(max_cluster_zoom)
-    if(is.null(zoom) == FALSE){
-      if( zoom < max_cluster_zoom){
+    if(is.null(input$mymap_zoom) == FALSE){
+      if(input$mymap_zoom < max_cluster_zoom){ #if zoom < cluster max, do nothing
         map
       }
       else{
         map %>%
-          addLegend("bottomright", pal = factpal, values = ~fall,  # add legend
+          addLegend("bottomright", pal = factpal, values = ~fall, #otherwise add legend
                     title = "Fall Status",
                     opacity = 1)
       }
     }
+  }
+  
+  # Observe mass change
+  observeEvent(input$mass_range, {
+    redraw()
   })
   
-  ##### FOR DATA TABLE #####
+  # Observe year change
+  observeEvent(input$year_range, {
+    redraw()
+  })
   
-  output$raw_table = DT::renderDataTable({ select(meteorites, -lat, -long)},
-                                         colnames = 
-        c('Name', 'ID', 'Class', 'Mass', 'Fall or Found', 'Year',
-          'Latitude', 'Longitude'), 
-        options = list(pageLength = 15,
-        columnDefs = list(list(className = 'dt-right', targets = 7:8),
-                          list(className = 'dt-left', targets = 2))))
+  # Observe fall change
+  observeEvent(input$fall_found, {
+    redraw()
+  })
+  
+  # Observe class change
+  observeEvent(input$class, {
+    redraw()
+  })
  
   ##### FOR PLOTS #####
   
   # Mass
   m_data = reactive({
-    
     if(input$m_class == "Any"){
       filter(meteorites, 
              fall %in% f_switch(input$m_ff),
@@ -156,7 +158,6 @@ server = function(input, output, session){
   
   # Year
   y_data = reactive({
-    
     if(input$y_class == "Any"){
       filter(meteorites, 
              fall %in% f_switch(input$y_ff),
@@ -203,6 +204,16 @@ server = function(input, output, session){
           "Total Count", "Percent of All Meteorites"), 
         options = list(pageLength = 15,
         columnDefs = list(list(className = 'dt-right', targets = c(2)))))
+  
+  ##### FOR DATA TABLE #####
+  
+  output$raw_table = DT::renderDataTable({ select(meteorites, -lat, -long)},
+         colnames = 
+           c('Name', 'ID', 'Class', 'Mass', 'Fall or Found', 'Year',
+             'Latitude', 'Longitude'), 
+         options = list(pageLength = 15,
+                        columnDefs = list(list(className = 'dt-right', targets = 7:8),
+                                          list(className = 'dt-left', targets = 2))))
   
 }
 
