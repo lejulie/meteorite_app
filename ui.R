@@ -1,44 +1,7 @@
 # Meteorite visuatlization - UI File
 
 ui <- fluidPage(
-  
-  # Add CSS
-  #' tags$head(
-  #'   tags$style(HTML("
-  #'     @import url('https://bootswatch.com/4/flatly/bootstrap.min.css')"))
-  #' ),
-  #' 
-  tags$head(
-    tags$style(HTML("
-@import url('https://fonts.googleapis.com/css?family=Roboto');
-@import url('https://fonts.googleapis.com/css?family=Roboto Slab');
-                    
-body {
-font-family: 'Roboto Slab';          
-color: #495057; 
-text-align: justify;
-}
-
-h1 {
-font-family: 'Roboto';
-font-weight: 500;
-line-height: 1.1;
-color: #2FA4E7;
-}
-
-h2, h3, h4 {
-font-family: 'Roboto';
-}
-
-a {
-color: #DD5600;
-}
-
-blockquote {
-font-size: 14px;
-}
-                    "))
-    ),
+  theme = "theme.css",
 
   navbarPage("Meteorite Landings",
     
