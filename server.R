@@ -6,7 +6,6 @@ server = function(input, output, session){
   
   # Reactive expression for widgets
   filtered.data = reactive({
-    
     if(input$class == "Any"){
       filter(meteorites, 
              fall %in% f_switch(input$fall_found), 
@@ -55,9 +54,9 @@ server = function(input, output, session){
         clusterOptions = markerClusterOptions(disableClusteringAtZoom = 
                                                 max_cluster_zoom,
                                               spiderfyOnMaxZoom = FALSE)) %>%
-      addLegend("bottomright", pal = factpal, values = ~fall, title = 
-                  "Fall Status",
-                opacity = 1) %>%
+      # addLegend("bottomright", pal = factpal, values = ~fall, title = 
+      #             "Fall Status",
+      #           opacity = 1) %>%
       setView(zoom = initial_zoom, 0, 0)
   })
   
@@ -72,7 +71,7 @@ server = function(input, output, session){
   
   # Observer for widget changes
   observe({
-    leafletProxy("mymap", data = filtered.data()) %>%
+    map = leafletProxy("mymap", data = filtered.data()) %>%
       clearMarkerClusters() %>%      # remove the existing clusters
       clearControls() %>%            # remove the exisitng legend
       addCircleMarkers(              # add markers
@@ -84,10 +83,21 @@ server = function(input, output, session){
         fillOpacity = 0.5,
         clusterOptions = markerClusterOptions(disableClusteringAtZoom = 
                                                 max_cluster_zoom,
-                                              spiderfyOnMaxZoom = FALSE)) %>%
-      addLegend("bottomright", pal = factpal, values = ~fall,  # add legend
-                title = "Fall Status",
-                opacity = 1)
+                                              spiderfyOnMaxZoom = FALSE))
+    zoom = input$mymap_zoom
+    print(zoom)
+    #print(max_cluster_zoom)
+    if(is.null(zoom) == FALSE){
+      if( zoom < max_cluster_zoom){
+        map
+      }
+      else{
+        map %>%
+          addLegend("bottomright", pal = factpal, values = ~fall,  # add legend
+                    title = "Fall Status",
+                    opacity = 1)
+      }
+    }
   })
   
   ##### FOR DATA TABLE #####
