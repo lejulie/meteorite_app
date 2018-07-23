@@ -2,7 +2,7 @@
 
 server = function(input, output, session){
 
-  ##### FOR MAPS #####
+  ##### MAP #####
   
   # Reactive expression for widgets
   filtered.data = reactive({
@@ -113,9 +113,10 @@ server = function(input, output, session){
     redraw()
   })
  
-  ##### FOR PLOTS #####
+  ##### PLOTS #####
   
-  # Mass
+  ##### Mass Plot #####
+  
   m_data = reactive({
     if(input$m_class == "Any"){
       filter(meteorites, 
@@ -156,7 +157,8 @@ server = function(input, output, session){
       selected = class_list[1])
   })
   
-  # Year
+  ##### Year Plot #####
+
   y_data = reactive({
     if(input$y_class == "Any"){
       filter(meteorites, 
@@ -198,14 +200,15 @@ server = function(input, output, session){
       selected = class_list[1])
   })
   
-  # Class
+  ##### Class Plot #####
+  
   output$c_table = DT::renderDataTable({ c_summary },colnames = 
         c("Class", "Average Mass (g)", "Count Fell","Count Found",
           "Total Count", "Percent of All Meteorites"), 
         options = list(pageLength = 15,
         columnDefs = list(list(className = 'dt-right', targets = c(2)))))
   
-  ##### FOR DATA TABLE #####
+  ##### DATA TABLE #####
   
   output$raw_table = DT::renderDataTable({ select(meteorites, -lat, -long)},
          colnames = 
