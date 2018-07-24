@@ -15,19 +15,19 @@ server = function(input, output, session){
   
   # Reactive expression for widgets
   filtered.data = reactive({
-    filter(meteorites, 
-      fall %in% f_switch(input$fall_found), 
+    filter(meteorites,
       mass >= input$mass_range[1], 
       mass <= input$mass_range[2],
       year >= input$year_range[1],
       year <= input$year_range[2],
+      fall %in% f_switch(input$fall_found),
       class %in% class_switch(input$class),
       country %in% country_switch(input$country))
   })
   
   sub.filtered.data = reactive({
     filter(meteorites, 
-           fall %in% f_switch(input$fall_found), 
+           #fall %in% f_switch(input$fall_found), 
            mass >= input$mass_range[1], 
            mass <= input$mass_range[2],
            year >= input$year_range[1],
@@ -36,7 +36,9 @@ server = function(input, output, session){
   
   # Update map class list when changes are made
   observe({
-    sub = filter(sub.filtered.data(), country %in% country_switch(input$country))
+    sub = filter(sub.filtered.data(), 
+                 country %in% country_switch(input$country),
+                 fall %in% f_switch(input$fall_found))
     
     class_list = c("Any",as.vector(unique(sub$class[order(sub$class)])))
       updateSelectInput(
@@ -47,7 +49,9 @@ server = function(input, output, session){
   
   # Update map country list when changes are made
   observe({
-    sub = filter(sub.filtered.data(), class %in% class_switch(input$class))
+    sub = filter(sub.filtered.data(), 
+                 class %in% class_switch(input$class),
+                 fall %in% f_switch(input$fall_found))
     
     country_list = c("Any",as.vector(unique(sub$country[order(sub$country)])))
     updateSelectInput(
@@ -58,13 +62,16 @@ server = function(input, output, session){
   
   # Update fell/found list when changes are made
   observe({
-    sub = filter(meteorites,
-      mass >= input$mass_range[1],
-      mass <= input$mass_range[2],
-      year >= input$year_range[1],
-      year <= input$year_range[2],
-      class %in% class_switch(input$class),
-      country %in% country_switch(input$country))
+    sub = filter(sub.filtered.data(),
+           class %in% class_switch(input$class),
+           country %in% country_switch(input$country))
+    fall_list = c("Fell or Found",
+                  paste(as.vector(unique(sub$fall[order(sub$fall)])),"Only")
+                  )
+    updateSelectInput(
+      session, "fall_found",
+      choices = fall_list,
+      selected = input$fall_found)
   })
   
   # Color palette
