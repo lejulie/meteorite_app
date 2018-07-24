@@ -63,14 +63,17 @@ ui <- fluidPage(
          column(3, sliderInput("year_range", label = h3("Year"), min = 300, 
                                max = 2013, value = c(300, 2013))),
          
-         column(3, radioButtons("fall_found", label = h3("Fell or Found"),
+         column(2, selectInput("fall_found", label = h3("Fell or Found"),
                                 choices = list("Fell or Found",
                                                "Fell Only",
                                                "Found Only"), 
                                 selected = "Fell or Found")),
          
-         column(3, selectInput("class", label = h3("Class"), 
+         column(2, selectInput("class", label = h3("Class"), 
                                choices = class_list_1, 
+                               selected = 1)),
+         column(2, selectInput("country", label = h3("Country"),
+                               choices = country_list_1,
                                selected = 1))
        ), #close fluidrow
       

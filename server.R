@@ -15,35 +15,56 @@ server = function(input, output, session){
   
   # Reactive expression for widgets
   filtered.data = reactive({
-    if(input$class == "Any"){
-      filter(meteorites, 
-             fall %in% f_switch(input$fall_found), 
-             mass >= input$mass_range[1], 
-             mass <= input$mass_range[2],
-             year >= input$year_range[1],
-             year <= input$year_range[2])}
-    else{
-      filter(meteorites, 
-             fall %in% f_switch(input$fall_found), 
-             mass >= input$mass_range[1], 
-             mass <= input$mass_range[2],
-             year >= input$year_range[1],
-             year <= input$year_range[2],
-             class == input$class)}
+    filter(meteorites, 
+      fall %in% f_switch(input$fall_found), 
+      mass >= input$mass_range[1], 
+      mass <= input$mass_range[2],
+      year >= input$year_range[1],
+      year <= input$year_range[2],
+      class %in% class_switch(input$class),
+      country %in% country_switch(input$country))
   })
   
+  sub.filtered.data = reactive({
+    filter(meteorites, 
+           fall %in% f_switch(input$fall_found), 
+           mass >= input$mass_range[1], 
+           mass <= input$mass_range[2],
+           year >= input$year_range[1],
+           year <= input$year_range[2])
+  })
+  
+  # Update map class list when changes are made
   observe({
-      sub = filter(meteorites, 
-                   fall %in% f_switch(input$fall_found), 
-                   mass >= input$mass_range[1], 
-                   mass <= input$mass_range[2],
-                   year >= input$year_range[1],
-                   year <= input$year_range[2])
-      class_list = c("Any", as.vector(unique(sub$class[order(sub$class)])))
+    sub = filter(sub.filtered.data(), country %in% country_switch(input$country))
+    
+    class_list = c("Any",as.vector(unique(sub$class[order(sub$class)])))
       updateSelectInput(
         session, "class",
         choices = class_list,
-        selected = class_list[1])
+        selected = input$class)
+  })
+  
+  # Update map country list when changes are made
+  observe({
+    sub = filter(sub.filtered.data(), class %in% class_switch(input$class))
+    
+    country_list = c("Any",as.vector(unique(sub$country[order(sub$country)])))
+    updateSelectInput(
+      session, "country",
+      choices = country_list,
+      selected = input$country)
+  })
+  
+  # Update fell/found list when changes are made
+  observe({
+    sub = filter(meteorites,
+      mass >= input$mass_range[1],
+      mass <= input$mass_range[2],
+      year >= input$year_range[1],
+      year <= input$year_range[2],
+      class %in% class_switch(input$class),
+      country %in% country_switch(input$country))
   })
   
   # Color palette
@@ -73,7 +94,6 @@ server = function(input, output, session){
                     "Found:", nrow(filtered.data()[filtered.data()$fall == 
                                                      "Found",]),
                     "Total:", nrow(filtered.data())))
-    print(input$id)
   })
   
   redraw = function(){
@@ -120,6 +140,11 @@ server = function(input, output, session){
   
   # Observe class change
   observeEvent(input$class, {
+    redraw()
+  })
+  
+  # Observe country change
+  observeEvent(input$country, {
     redraw()
   })
  

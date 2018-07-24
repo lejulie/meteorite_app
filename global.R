@@ -15,14 +15,18 @@ meteorites = select(meteorites, -X)
 meteorites$lat_pretty = format(round(meteorites$lat, 3), nsmall=3)
 meteorites$long_pretty = format(round(meteorites$long, 3), nsmall=3)
 
+# Class summary
 c_summary = read.csv("./data/class_summary_table.csv")
 c_summary = select(c_summary, -X)
 
 ##### GLOBAL VARS #####
 
+# Parameters for the map
 initial_zoom = 1
 max_cluster_zoom = 4
 circle_radius = 2
+
+# Initial list of classes
 class_list_1 = c("Any",
                  as.vector(unique(meteorites$class[order(meteorites$class)])))
 class_list_top_50 = meteorites %>% 
@@ -30,6 +34,10 @@ class_list_top_50 = meteorites %>%
   summarise(., count = n()) %>%
   arrange(., desc(count))
 class_list_top_50 = class_list_top_50$class[1:50]
+
+# initial list of countries
+country_list_1 = c("Any", 
+                   as.vector(unique(meteorites$country[order(meteorites$country)])))
 
 ##### GLOBAL FUNCTIONS #####
 f_switch = function(value){
@@ -40,5 +48,15 @@ f_switch = function(value){
   return(opt)
 }
   
-  
+class_switch = function(value){
+  ifelse(value == "Any",
+         return(class_list_1),
+         return(value))
+}
+
+country_switch = function(value){
+  ifelse(value == "Any",
+         return(country_list_1),
+         return(value))
+}
   
