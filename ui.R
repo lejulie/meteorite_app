@@ -9,13 +9,40 @@ ui <- fluidPage(
     tabPanel("Welcome!",
       # H1
       tags$div(class = "header", checked = NA,
-               tags$h1("Let's Talk About Meteorites")),
-      tags$div(class = "body", checked = NA,
-               tags$p("Content here"))
+               tags$h1("Investigating Meteorites")),
+      fluidRow(
+        column(12,
+        tags$div(class = "body", checked = NA,
+                 tags$p("Learn about meteorites using data from the ",
+                 tags$a(href=
+                 'https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh',
+                 'NASA Open Data Portal.'))),
+        br())
+      ),
+      fluidRow(
+        column(5, wellPanel(tags$h3("Map Meteorites"),
+                  tags$p("See where meteories have landed around the world.")
+                  #actionButton("map_btn", label = "Map")
+                  )),
+        column(5, wellPanel(tags$h3("Break It Down"),
+                  tags$p("View breakdowns of meterorite characteristics.")
+                  # actionButton("plot_btn", label = "Plot")
+                  ))
+      ),
+      fluidRow(
+        column(5, wellPanel(tags$h3("View Raw Data"),
+                  tags$p("Check out a table of the raw data.")
+                  # actionButton("raw_btn", label = "View")
+                  )),
+        column(5, wellPanel(tags$h3("Learn More"),
+                  tags$p("Learn more about the info in this data set.")
+                  # actionButton("learn_btn", label = "Learn")
+                  ))
+      )
     ), # end welcome tab
     
     ##### Map ##### 
-    tabPanel("Map Meteorites", 
+    tabPanel("Map Meteorites",
        # H1
        tags$div(class = "header", checked = NA,
                 tags$h1("Where Have Meteorites Been Found?")),
@@ -128,14 +155,13 @@ ui <- fluidPage(
        tags$h2('What is a meteorite?'),
        tags$p('According to ',
               tags$a(href=
-                       'https://www.nasa.gov/audience/forstudents/k-4/dictionary/Meteorite.html',
-                     'NASA'),', a meteorite is “a rock 
-              that has fallen to Earth from outer space.”  When a piece of debris 
-              from an object (such as a comet or asteroid) enters the atmosphere of 
-              a planet or moon (such as Earth), it becomes a ',tags$em('meteor'),
-              ' as it descends towards the surface.  If the meteor survives passage 
-              all the way to the planet or moon’s surface, it is then considered a ',
-              tags$em('meteorite'),'.'
+              'https://www.nasa.gov/audience/forstudents/k-4/dictionary/Meteorite.html',
+              'NASA'),', a meteorite is “a rock that has fallen to Earth from outer 
+              space.”  When a piece of debris from an object (such as a comet or asteroid
+              ) enters the atmosphere of a planet or moon (such as Earth), it becomes 
+              a ',tags$em('meteor'),' as it descends towards the surface.  If the meteor 
+              survives passage all the way to the planet or moon’s surface, it is then 
+              considered a ',tags$em('meteorite'),'.'
        ), # close paragraph
        tags$p('Meteors vary greatly in size, shape, and composition.  This app 
               lets you explores some of these attributes for over 30,000 meteorites 
@@ -144,9 +170,9 @@ ui <- fluidPage(
        # What can you learn in this app?
        tags$h2('What can you learn in this app?'),
        tags$p('This app uses ',tags$a(href=
-                                        'https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh',
-                                      'this data'),' aggregated by ',tags$a(href=
-                                                                              'http://meteoriticalsociety.org/','The Meteoritical Society'),
+              'https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh',
+              'this data'),' aggregated by ',tags$a(href=
+              'http://meteoriticalsociety.org/','The Meteoritical Society'),
               ' including information on the characteristics below:'),
        
        tags$h3('Meteorite sites'),
@@ -159,7 +185,7 @@ ui <- fluidPage(
               'or ',tags$em('fell'),'.  One that was determined to be a meteorite by 
               examination of its properties is classified as a ',tags$em('found'),' 
               meteorite.  See ',tags$a(href=
-                                         'https://en.wikipedia.org/wiki/Meteorite_fall','Wikipedia'),' for 
+              'https://en.wikipedia.org/wiki/Meteorite_fall','Wikipedia'),' for 
               more.'),
        
        tags$h3('Meteorite categorization'),
@@ -168,8 +194,8 @@ ui <- fluidPage(
               by their origin (rocks from the same source should be made of similar 
               stuff).  There are several taxonomies for classifying meterorites.  
               According to ',tags$a(href=
-                                      'https://www.lpi.usra.edu/meteor/notes.php?note=6','the Meteoritical 
-                                    Society'),'website,'),
+              'https://www.lpi.usra.edu/meteor/notes.php?note=6','the Meteoritical 
+              Society'),'website,'),
        tags$blockquote('If the meteorite was published in both the Catalogue of 
                        Meteorites and MetBase (see columns NHMCat and MetBase), both 
                        classifications will appear if they do not agree. If the 
@@ -180,11 +206,11 @@ ui <- fluidPage(
                        unreviewed reports (provisional names).'),
        tags$p('You can read more about the classification of meteorites on ',
               tags$a(href='https://en.wikipedia.org/wiki/Meteorite_classification',
-                     'Wikipedia.')),
+              'Wikipedia.')),
        tags$h3('Meteorite mass'),
        tags$p('Meteorite masses in this dataset are in grams.  A note on masses 
               from ,',tags$a(href='https://www.lpi.usra.edu/meteor/notes.php?note=16',
-                             'the Meteoritical Society'),' website.')
+              'the Meteoritical Society'),' website.')
       ) # close div
     ), #close Lean tab
     
@@ -201,8 +227,9 @@ ui <- fluidPage(
           tags$a(href='https://www.datadoghq.com/','Datadog.'),'Presently, I’m a Data 
           Science Fellow at ', tags$a(href='https://nycdatascience.com/','NYC Data 
           Science Academy.'),'Check out more of my projects on the ',tags$a(href=
-  'https://nycdatascience.com/blog/author/lejulie/','NYC Data Science Academy blog'),' and 
-  on ',tags$a(href="https://github.com/lejulie?tab=repositories","github."))
+          'https://nycdatascience.com/blog/author/lejulie/','NYC Data Science Academy 
+          blog'),' and on ',tags$a(href=
+          "https://github.com/lejulie?tab=repositories","github."))
         ) # close div
       ) # close About tab
 

@@ -2,6 +2,15 @@
 
 server = function(input, output, session){
 
+  ##### WELCOME PAGE #####
+  observeEvent(input$map_btn, { 
+    updateNavbarPage(session, "inTabset", selected = "asdf")
+    })
+  
+  observeEvent(input$plot_btn, { 
+    updateTabsetPanel(session, "inTabset", selected = "Mass") 
+  })
+  
   ##### MAP #####
   
   # Reactive expression for widgets
@@ -64,6 +73,7 @@ server = function(input, output, session){
                     "Found:", nrow(filtered.data()[filtered.data()$fall == 
                                                      "Found",]),
                     "Total:", nrow(filtered.data())))
+    print(input$id)
   })
   
   redraw = function(){
