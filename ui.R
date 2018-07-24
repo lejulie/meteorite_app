@@ -120,8 +120,9 @@ ui <- fluidPage(
                          tags$h1("Year Histogram")),
                 fluidRow(
                 column(4,
-                       sliderInput("y_mass", label = h3("Mass (g)"), min = 0, 
-                                  max = 13000, value = c(0, 13000)),
+                       selectInput("y_class", label = h3("Class"), 
+                                   choices = class_list_1, 
+                                   selected = 1),
                        selectInput("y_country", label = h3("Country"),
                                    choices = country_list_1,
                                    selected = 1),
@@ -130,9 +131,8 @@ ui <- fluidPage(
                                                    "Fell Only",
                                                    "Found Only"), 
                                     selected = "Fell or Found"),
-                       selectInput("y_class", label = h3("Class"), 
-                                   choices = class_list_1, 
-                                   selected = 1),
+                       sliderInput("y_mass", label = h3("Mass (g)"), min = 0, 
+                                   max = 13000, value = c(0, 13000)),
                        textOutput("year_counts")),
                 column(8,htmltools::div(style = "display:inline-block", 
                                plotlyOutput("y_plot", width = "auto", height = 
@@ -142,7 +142,7 @@ ui <- fluidPage(
        tabPanel("Class",
                 # H1
                 tags$div(class = "header", checked = NA,
-                         tags$h1("Meteorite Classes")),
+                         tags$h1("Meteorite Data by Classification")),
                 # Table
                 DT::dataTableOutput("c_table")
                 ),
@@ -151,7 +151,7 @@ ui <- fluidPage(
        tabPanel("Country",
                 # H1
                 tags$div(class = "header", checked = NA,
-                         tags$h1("Meteorite Countries")),
+                         tags$h1("Meteorite Data by Country")),
                 # Table
                 DT::dataTableOutput("country_table")
                 )
@@ -181,8 +181,7 @@ ui <- fluidPage(
         ) enters the atmosphere of a planet or moon (such as Earth), it becomes 
         a ',tags$em('meteor'),' as it descends towards the surface.  If the meteor 
         survives passage all the way to the planet or moon’s surface, it is then 
-        considered a ',tags$em('meteorite'),'.'
-       ), # close paragraph
+        considered a ',tags$em('meteorite.')), # close paragraph
        tags$p('Meteors vary greatly in size, shape, and composition.  This app 
         lets you explore some of these attributes for over 30,000 meteorites 
         here on Earth.'), #close paragraph
@@ -196,12 +195,16 @@ ui <- fluidPage(
         ' including information on the characteristics below:'),
        
        tags$h3('Meteorite sites'),
-       tags$p('Check out a map of where meterorites where found across the globe.'),
+       tags$p('Check out a map of where meterorites were found across the globe. 
+              Countries were derived using ',tags$a(href=
+              "https://github.com/thampiman/reverse-geocoder","this"),' reverse
+              geocoder by',tags$a(href="https://github.com/thampiman",
+              "Ajay Thampi.")),
        
        tags$h3('Fell vs. found'),
        tags$p('Meterorites can be classified on whether or not a person saw their 
         descent to Earth.  A meteorite that someone witnessed falling to Earth 
-        and then successfully tracked down is classified as a ',tags$em('fall'),
+        and then successfully tracked down is classified as ',tags$em('fall'),
         'or ',tags$em('fell'),'.  One that was determined to be a meteorite by 
         examination of its properties is classified as ',tags$em('found.'),' 
         See ',tags$a(href=

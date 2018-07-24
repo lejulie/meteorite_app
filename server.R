@@ -368,7 +368,7 @@ server = function(input, output, session){
   
   output$raw_table = DT::renderDataTable({ select(meteorites, -lat, -long)},
          colnames = 
-           c('Name', 'ID', 'Class', 'Mass', 'Fall or Found', 'Year',
+           c('Name', 'ID', 'Class', 'Mass (g)', 'Fell or Found', 'Year',
              'Latitude', 'Longitude', 'Country'), 
          options = list(pageLength = 15,
                         columnDefs = list(list(className = 'dt-right', targets = 7:8),
