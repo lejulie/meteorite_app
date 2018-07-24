@@ -145,8 +145,16 @@ ui <- fluidPage(
                          tags$h1("Meteorite Classes")),
                 # Table
                 DT::dataTableOutput("c_table")
-                )
+                ),
        
+       # Country
+       tabPanel("Country",
+                # H1
+                tags$div(class = "header", checked = NA,
+                         tags$h1("Meteorite Countries")),
+                # Table
+                DT::dataTableOutput("country_table")
+                )
                 
        ), # close break it down panel
 

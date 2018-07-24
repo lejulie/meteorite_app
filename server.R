@@ -348,10 +348,18 @@ server = function(input, output, session){
                     "Total:", nrow(y_data_fell())+nrow(y_data_found())))
   })
   
-  ##### Class Plot #####
+  ##### Class Table #####
   
   output$c_table = DT::renderDataTable({ c_summary },colnames = 
         c("Class", "Average Mass (g)", "Count Fell","Count Found",
+          "Total Count", "Percent of All Meteorites"), 
+        options = list(pageLength = 15,
+        columnDefs = list(list(className = 'dt-right', targets = c(2)))))
+  
+  ##### Country Table #####
+  
+  output$country_table = DT::renderDataTable({ country_summary },colnames = 
+        c("Country", "Average Mass (g)", "Count Fell","Count Found",
           "Total Count", "Percent of All Meteorites"), 
         options = list(pageLength = 15,
         columnDefs = list(list(className = 'dt-right', targets = c(2)))))

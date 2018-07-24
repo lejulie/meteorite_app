@@ -19,6 +19,10 @@ meteorites$long_pretty = format(round(meteorites$long, 3), nsmall=3)
 c_summary = read.csv("./data/class_summary_table.csv")
 c_summary = select(c_summary, -X)
 
+# Country summary
+country_summary = read.csv("./data/country_summary_table.csv")
+country_summary = select(country_summary, -X)
+
 ##### GLOBAL VARS #####
 
 # Parameters for the map
