@@ -96,12 +96,15 @@ ui <- fluidPage(
                 column(4,
                        selectInput("m_class", label = h3("Class"), choices = 
                                      class_list_1, selected = 1),
+                       selectInput("m_country", label = h3("Country"),
+                                             choices = country_list_1,
+                                             selected = 1),
+                       selectInput("m_ff", label = h3("Fell or Found"),
+                                   choices = list("Fell or Found", "Fell Only",
+                                                  "Found Only"), 
+                                   selected = "Fell or Found"),
                        sliderInput("m_year", label = h3("Year"), min = 300, 
                                       max = 2013, value = c(300, 2013)),
-                       radioButtons("m_ff", label = h3("Fell or Found"),
-                                       choices = list("Fell or Found", "Fell Only",
-                                                      "Found Only"), 
-                                       selected = "Fell or Found"),
                        textOutput("mass_counts")
                        ), #close column
                 #Plot

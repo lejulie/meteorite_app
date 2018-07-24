@@ -27,7 +27,6 @@ server = function(input, output, session){
   
   sub.filtered.data = reactive({
     filter(meteorites, 
-           #fall %in% f_switch(input$fall_found), 
            mass >= input$mass_range[1], 
            mass <= input$mass_range[2],
            year >= input$year_range[1],
@@ -159,32 +158,75 @@ server = function(input, output, session){
   
   ##### Mass Plot #####
   
+  # m_data_fell = reactive({
+  #   if(input$m_ff == "Found Only"){
+  #     return(filter(meteorites, fall != "Fell", fall != "Found"))
+  #   }
+  #   if(input$m_class == "Any"){
+  #     filter(meteorites, fall == "Fell", year >= input$m_year[1],
+  #            year <= input$m_year[2]) %>%
+  #     select(., mass, fall)}
+  #   else{
+  #     filter(meteorites, fall == "Fell", year >= input$m_year[1], 
+  #            year <= input$m_year[2], class == input$m_class) %>%
+  #     select(., mass, fall)}
+  # })
+  # 
+  # m_data_found = reactive({
+  #   if(input$m_ff == "Fell Only"){
+  #     return(filter(meteorites, fall != "Fell", fall != "Found"))
+  #   }
+  #   if(input$m_class == "Any"){
+  #     filter(meteorites, fall == "Found", year >= input$m_year[1],
+  #            year <= input$m_year[2]) %>%
+  #     select(., mass, fall)}
+  #   else{
+  #     filter(meteorites,fall == "Found", year >= input$m_year[1],
+  #            year <= input$m_year[2], class == input$m_class) %>%
+  #       select(., mass, fall)}
+  # })
+  
+  # m_data = reactive({
+  #   filter(meteorites,
+  #          year >= input$m_year[1],
+  #          year <= input$m_year[2],
+  #          fall %in% f_switch(input$m_ff),
+  #          class %in% class_switch(input$m_class),
+  #          country %in% country_switch(input$m_country))
+  # })
+  
+  sub_m_data = reactive({
+    filter(meteorites, 
+           year >= input$m_year[1],
+           year <= input$m_year[2])
+  })
+  
   m_data_fell = reactive({
     if(input$m_ff == "Found Only"){
       return(filter(meteorites, fall != "Fell", fall != "Found"))
     }
-    if(input$m_class == "Any"){
-      filter(meteorites, fall == "Fell", year >= input$m_year[1],
-             year <= input$m_year[2]) %>%
-      select(., mass, fall)}
     else{
-      filter(meteorites, fall == "Fell", year >= input$m_year[1], 
-             year <= input$m_year[2], class == input$m_class) %>%
-      select(., mass, fall)}
+      filter(meteorites,
+             fall == "Fell",
+             year >= input$m_year[1],
+             year <= input$m_year[2],
+             class %in% class_switch(input$m_class),
+             country %in% country_switch(input$m_country))
+    }
   })
   
   m_data_found = reactive({
     if(input$m_ff == "Fell Only"){
       return(filter(meteorites, fall != "Fell", fall != "Found"))
     }
-    if(input$m_class == "Any"){
-      filter(meteorites, fall == "Found", year >= input$m_year[1],
-             year <= input$m_year[2]) %>%
-      select(., mass, fall)}
     else{
-      filter(meteorites,fall == "Found", year >= input$m_year[1],
-             year <= input$m_year[2], class == input$m_class) %>%
-        select(., mass, fall)}
+      filter(meteorites,
+             fall == "Found",
+             year >= input$m_year[1],
+             year <= input$m_year[2],
+             class %in% class_switch(input$m_class),
+             country %in% country_switch(input$m_country))
+    }
   })
   
   output$m_plot <- renderPlotly({
@@ -204,16 +246,41 @@ server = function(input, output, session){
     p
   })
   
+  # Update Fell / Found list
   observe({
-    sub = filter(meteorites, 
-                 fall %in% f_switch(input$m_ff), 
-                 year >= input$m_year[1],
-                 year <= input$m_year[2])
-    class_list = c("Any", as.vector(unique(sub$class[order(sub$class)])))
+    sub = filter(sub_m_data(),
+                 country %in% country_switch(input$m_country),
+                 class %in% class_switch(input$m_class))
+    fall_list = c("Fell or Found",
+                  paste(as.vector(unique(sub$fall[order(sub$fall)])),"Only"))
+    updateSelectInput(
+      session, "m_ff",
+      choices = fall_list,
+      selected = input$m_ff)
+  })
+  
+  # Update country list
+  observe({
+    sub = filter(sub_m_data(),
+                 fall %in% f_switch(input$m_ff),
+                 class %in% class_switch(input$m_class))
+    country_list = c("Any",as.vector(unique(sub$country[order(sub$country)])))
+    updateSelectInput(
+      session, "m_country",
+      choices = country_list,
+      selected = input$m_country)
+  })
+  
+  # Update class list
+  observe({
+    sub = filter(sub_m_data(),
+                 fall %in% f_switch(input$m_ff),
+                 country %in% country_switch(input$m_country))
+    class_list = c("Any",as.vector(unique(sub$class[order(sub$class)])))
     updateSelectInput(
       session, "m_class",
       choices = class_list,
-      selected = class_list[1])
+      selected = input$m_class)
   })
   
   # Counts
