@@ -96,7 +96,7 @@ server = function(input, output, session){
       }
       else{
         map %>%
-          addLegend("bottomright", pal = factpal, values = ~fall, #otherwise add legend
+          addLegend("bottomright", pal = factpal, values = ~fall, # add legend
                     title = "Fall Status",
                     opacity = 1)
       }
@@ -127,32 +127,49 @@ server = function(input, output, session){
   
   ##### Mass Plot #####
   
-  m_data = reactive({
+  m_data_fell = reactive({
+    if(input$m_ff == "Found Only"){
+      return(filter(meteorites, fall != "Fell", fall != "Found"))
+    }
     if(input$m_class == "Any"){
-      filter(meteorites, 
-             fall %in% f_switch(input$m_ff),
-             year >= input$m_year[1],
+      filter(meteorites, fall == "Fell", year >= input$m_year[1],
              year <= input$m_year[2]) %>%
-        select(., mass, fall)}
+      select(., mass, fall)}
     else{
-      filter(meteorites, 
-             fall %in% f_switch(input$m_ff), 
-             year >= input$m_year[1],
-             year <= input$m_year[2],
-             class == input$m_class) %>%
+      filter(meteorites, fall == "Fell", year >= input$m_year[1], 
+             year <= input$m_year[2], class == input$m_class) %>%
+      select(., mass, fall)}
+  })
+  
+  m_data_found = reactive({
+    if(input$m_ff == "Fell Only"){
+      return(filter(meteorites, fall != "Fell", fall != "Found"))
+    }
+    if(input$m_class == "Any"){
+      filter(meteorites, fall == "Found", year >= input$m_year[1],
+             year <= input$m_year[2]) %>%
+      select(., mass, fall)}
+    else{
+      filter(meteorites,fall == "Found", year >= input$m_year[1],
+             year <= input$m_year[2], class == input$m_class) %>%
         select(., mass, fall)}
   })
   
   output$m_plot <- renderPlotly({
-    p = plot_ly(x = m_data()$mass, type = "histogram", autobinx = T,
-                xbins = list(start = 0, end = 13000, marker = list(
-                  color = toRGB("orange", 0.6))))
-
-    p %>%
+    p = plot_ly(alpha = 0.8, type = "histogram", autobinx = F,
+                xbins = list(start = 0, end = 13000, size = 200)) %>%
       config(displayModeBar = F, showLink = F) %>%
-      layout(showlegend = F, barmode = "overlay", yaxis = 
-               list(title = "Count"),
+      layout(showlegend = T, barmode = "overlay", 
+             yaxis = list(title = "Count"),
              xaxis = (list(title = "Mass (g)", showticklabels = T)))
+    
+    if(nrow(m_data_found())>0){
+      p = p %>% add_histogram(x = m_data_found()$mass, name = "Found",
+                              marker = list(color = toRGB("#73A839", 0.6)))}
+    if(nrow(m_data_fell())>0){
+      p = p %>% add_histogram(x = m_data_fell()$mass, name = "Fell",
+                              marker = list(color = toRGB("#2FA4E7", 0.8)))}
+    p
   })
   
   observe({
@@ -167,35 +184,92 @@ server = function(input, output, session){
       selected = class_list[1])
   })
   
-  ##### Year Plot #####
-
-  y_data = reactive({
-    if(input$y_class == "Any"){
-      filter(meteorites, 
-             fall %in% f_switch(input$y_ff),
-             mass >= input$y_mass[1],
-             mass <= input$y_mass[2]) %>%
-        select(., year, fall)
-    }
-    else{
-      filter(meteorites, 
-             fall %in% f_switch(input$y_ff), 
-             mass >= input$y_mass[1],
-             mass <= input$y_mass[2],
-             class == input$y_class) %>%
-        select(., year, fall)
-    }
+  # Counts
+  output$mass_counts = renderText({
+    invisible(paste("Fell:", nrow(m_data_fell()),
+                    "Found:", nrow(m_data_found()),
+                    "Total:", nrow(m_data_found()) + nrow(m_data_fell()) ))
   })
   
+  ##### Year Plot #####
+
+  # y_data = reactive({
+  #   if(input$y_class == "Any"){
+  #     filter(meteorites, 
+  #            fall %in% f_switch(input$y_ff),
+  #            mass >= input$y_mass[1],
+  #            mass <= input$y_mass[2]) %>%
+  #       select(., year, fall)
+  #   }
+  #   else{
+  #     filter(meteorites, 
+  #            fall %in% f_switch(input$y_ff), 
+  #            mass >= input$y_mass[1],
+  #            mass <= input$y_mass[2],
+  #            class == input$y_class) %>%
+  #       select(., year, fall)
+  #   }
+  # })
+  y_data_fell = reactive({
+    if(input$y_ff == "Found Only"){
+      return(filter(meteorites, fall != "Fell", fall != "Found"))
+    }
+    if(input$y_class == "Any"){
+      filter(meteorites, fall == "Fell", 
+             mass >= input$y_mass[1],
+             mass <= input$y_mass[2]) %>%
+        select(., year, fall)}
+    else{
+      filter(meteorites, fall == "Fell", 
+             mass >= input$y_mass[1], 
+             mass <= input$y_mass[2], 
+             class == input$y_class) %>%
+        select(., year, fall)}
+  })
+  
+  y_data_found = reactive({
+    if(input$y_ff == "Fell Only"){
+      return(filter(meteorites, fall != "Fell", fall != "Found"))
+    }
+    if(input$y_class == "Any"){
+      filter(meteorites, 
+             fall == "Found", 
+             mass >= input$y_mass[1],
+             mass <= input$y_mass[2]) %>%
+        select(., year, fall)}
+    else{
+      filter(meteorites,fall == "Found", 
+             mass >= input$y_mass[1],
+             mass <= input$y_mass[2], 
+             class == input$y_class) %>%
+        select(., year, fall)}
+  })
+  
+  # output$y_plot <- renderPlotly({
+  #   p = plot_ly(x = y_data()$year, type = "histogram", autobinx = T,
+  #               xbins = list(start = 0, end = 13000), marker = list(
+  #                 color = toRGB("#DD5600", 0.8)))
+  #   p %>%
+  #     config(displayModeBar = F, showLink = F) %>%
+  #     layout(showlegend = F, barmode = "overlay", yaxis = list(title = "Count"),
+  #            xaxis = (list(title = "Year", showticklabels = T)))
+  # })
+  
   output$y_plot <- renderPlotly({
-    p = plot_ly(x = y_data()$year, type = "histogram", autobinx = T,
-                xbins = list(start = 0, end = 13000, marker = list(
-                  color = toRGB("orange", 0.6))))
-    
-    p %>%
+    p = plot_ly(alpha = 0.8, type = "histogram", autobinx = F,
+                xbins = list(start = 300, end = 2013, size = 1)) %>%
       config(displayModeBar = F, showLink = F) %>%
-      layout(showlegend = F, barmode = "overlay", yaxis = list(title = "Count"),
+      layout(showlegend = T, barmode = "overlay", 
+             yaxis = list(title = "Count"),
              xaxis = (list(title = "Year", showticklabels = T)))
+    
+    if(nrow(y_data_found())>0){
+      p = p %>% add_histogram(x = y_data_found()$year, name = "Found",
+                              marker = list(color = toRGB("#73A839", 0.6)))}
+    if(nrow(y_data_fell())>0){
+      p = p %>% add_histogram(x = y_data_fell()$year, name = "Fell",
+                              marker = list(color = toRGB("#2FA4E7", 0.8)))}
+    p
   })
   
   observe({
@@ -208,6 +282,13 @@ server = function(input, output, session){
       session, "y_class",
       choices = class_list,
       selected = class_list[1])
+  })
+  
+  # Counts
+  output$year_counts = renderText({
+    invisible(paste("Fell:", nrow(y_data_fell()),
+                    "Found:", nrow(y_data_found()),
+                    "Total:", nrow(y_data_fell())+nrow(y_data_found())))
   })
   
   ##### Class Plot #####

@@ -98,7 +98,8 @@ ui <- fluidPage(
                        radioButtons("m_ff", label = h3("Fell or Found"),
                                        choices = list("Fell or Found", "Fell Only",
                                                       "Found Only"), 
-                                       selected = "Fell or Found")
+                                       selected = "Fell or Found"),
+                       textOutput("mass_counts")
                        ), #close column
                 #Plot
                 column(8, htmltools::div(style = "display:inline-block",
@@ -122,7 +123,8 @@ ui <- fluidPage(
                                     selected = "Fell or Found"),
                        selectInput("y_class", label = h3("Class"), 
                                    choices = class_list_1, 
-                                   selected = 1)),
+                                   selected = 1),
+                       textOutput("year_counts")),
                 column(8,htmltools::div(style = "display:inline-block", 
                                plotlyOutput("y_plot", width = "auto", height = 
                                               "auto"))))),
@@ -149,7 +151,8 @@ ui <- fluidPage(
     tabPanel("Learn",
       tags$div(class = "header", checked = NA,
                tags$h1("Let's Talk About Meteorites")),
-      
+      fluidRow(
+        column(8,
       # What is a meteorite
       tags$div(class = "body", checked = NA,
        tags$h2('What is a meteorite?'),
@@ -164,7 +167,7 @@ ui <- fluidPage(
               considered a ',tags$em('meteorite'),'.'
        ), # close paragraph
        tags$p('Meteors vary greatly in size, shape, and composition.  This app 
-              lets you explores some of these attributes for over 30,000 meteorites 
+              lets you explore some of these attributes for over 30,000 meteorites 
               here on Earth.'), #close paragraph
        
        # What can you learn in this app?
@@ -172,7 +175,7 @@ ui <- fluidPage(
        tags$p('This app uses ',tags$a(href=
               'https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh',
               'this data'),' aggregated by ',tags$a(href=
-              'http://meteoriticalsociety.org/','The Meteoritical Society'),
+              'http://meteoriticalsociety.org/','The Meteoritical Society,'),
               ' including information on the characteristics below:'),
        
        tags$h3('Meteorite sites'),
@@ -183,8 +186,8 @@ ui <- fluidPage(
               descent to Earth.  A meteorite that someone witnessed falling to Earth 
               and then successfully tracked down is classified as a ',tags$em('fall'),
               'or ',tags$em('fell'),'.  One that was determined to be a meteorite by 
-              examination of its properties is classified as a ',tags$em('found'),' 
-              meteorite.  See ',tags$a(href=
+              examination of its properties is classified as ',tags$em('found.'),' 
+              See ',tags$a(href=
               'https://en.wikipedia.org/wiki/Meteorite_fall','Wikipedia'),' for 
               more.'),
        
@@ -195,7 +198,7 @@ ui <- fluidPage(
               stuff).  There are several taxonomies for classifying meterorites.  
               According to ',tags$a(href=
               'https://www.lpi.usra.edu/meteor/notes.php?note=6','the Meteoritical 
-              Society'),'website,'),
+              Society'),'website, the data here adheres to the following:'),
        tags$blockquote('If the meteorite was published in both the Catalogue of 
                        Meteorites and MetBase (see columns NHMCat and MetBase), both 
                        classifications will appear if they do not agree. If the 
@@ -209,20 +212,26 @@ ui <- fluidPage(
               'Wikipedia.')),
        tags$h3('Meteorite mass'),
        tags$p('Meteorite masses in this dataset are in grams.  A note on masses 
-              from ,',tags$a(href='https://www.lpi.usra.edu/meteor/notes.php?note=16',
-              'the Meteoritical Society'),' website.')
+              from',tags$a(href='https://www.lpi.usra.edu/meteor/notes.php?note=16',
+              'the Meteoritical Society'),' website:',tags$blockquote('Masses are 
+              taken from the Catalogue of Meteorites, MetBase, and/or the Meteoritical 
+              Bulletin. In most cases, they represent the total known weight of the 
+              meteorite. The masses shown here should not be considered as authoritative, 
+              and may be rounded off.'))
       ) # close div
-    ), #close Lean tab
+    ))
+    ), #close Learn tab
     
     ##### About Page #####
     tabPanel("About",
        # H1
        tags$div(class = "header", checked = NA,
                 tags$h1("About Me")),
+       fluidRow(column(8,
        tags$div(class = "body", checked = NA,
          tags$p('My name is Julie Levine.  I’m a graduate from the School of 
           Engineering and Applied Science at the University of Pennsylvania.  
-          In a past life I was a marketer and product manager for tech 
+          In a past life, I was a marketer and product manager for tech 
           startups ',tags$a(href='https://www.factual.com/','Fatual'),' and ',
           tags$a(href='https://www.datadoghq.com/','Datadog.'),'Presently, I’m a Data 
           Science Fellow at ', tags$a(href='https://nycdatascience.com/','NYC Data 
@@ -230,7 +239,7 @@ ui <- fluidPage(
           'https://nycdatascience.com/blog/author/lejulie/','NYC Data Science Academy 
           blog'),' and on ',tags$a(href=
           "https://github.com/lejulie?tab=repositories","github."))
-        ) # close div
+        )))
       ) # close About tab
 
   ) # close navbar layout
