@@ -7,12 +7,11 @@ library(shiny)
 library(leaflet)
 library(DT)
 library(dplyr)
-library(googleVis)
 library(plotly)
 
 # Read the data
-meteorites = read.csv("./data/cleaned_meteorites.csv")
-meteorites = select(meteorites, -X, -nametype)
+meteorites = read.csv("./data/meteorites_with_countries.csv")
+meteorites = select(meteorites, -X)
 meteorites$lat_pretty = format(round(meteorites$lat, 3), nsmall=3)
 meteorites$long_pretty = format(round(meteorites$long, 3), nsmall=3)
 
@@ -24,7 +23,8 @@ c_summary = select(c_summary, -X)
 initial_zoom = 1
 max_cluster_zoom = 4
 circle_radius = 2
-class_list_1 = c("Any", as.vector(unique(meteorites$class[order(meteorites$class)])))
+class_list_1 = c("Any",
+                 as.vector(unique(meteorites$class[order(meteorites$class)])))
 class_list_top_50 = meteorites %>% 
   group_by(., class) %>% 
   summarise(., count = n()) %>%
