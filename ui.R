@@ -157,67 +157,67 @@ ui <- fluidPage(
       tags$div(class = "body", checked = NA,
        tags$h2('What is a meteorite?'),
        tags$p('According to ',
-              tags$a(href=
-              'https://www.nasa.gov/audience/forstudents/k-4/dictionary/Meteorite.html',
-              'NASA'),', a meteorite is “a rock that has fallen to Earth from outer 
-              space.”  When a piece of debris from an object (such as a comet or asteroid
-              ) enters the atmosphere of a planet or moon (such as Earth), it becomes 
-              a ',tags$em('meteor'),' as it descends towards the surface.  If the meteor 
-              survives passage all the way to the planet or moon’s surface, it is then 
-              considered a ',tags$em('meteorite'),'.'
+        tags$a(href=
+        'https://www.nasa.gov/audience/forstudents/k-4/dictionary/Meteorite.html',
+        'NASA'),', a meteorite is “a rock that has fallen to Earth from outer 
+        space.”  When a piece of debris from an object (such as a comet or asteroid
+        ) enters the atmosphere of a planet or moon (such as Earth), it becomes 
+        a ',tags$em('meteor'),' as it descends towards the surface.  If the meteor 
+        survives passage all the way to the planet or moon’s surface, it is then 
+        considered a ',tags$em('meteorite'),'.'
        ), # close paragraph
        tags$p('Meteors vary greatly in size, shape, and composition.  This app 
-              lets you explore some of these attributes for over 30,000 meteorites 
-              here on Earth.'), #close paragraph
+        lets you explore some of these attributes for over 30,000 meteorites 
+        here on Earth.'), #close paragraph
        
        # What can you learn in this app?
        tags$h2('What can you learn in this app?'),
        tags$p('This app uses ',tags$a(href=
-              'https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh',
-              'this data'),' aggregated by ',tags$a(href=
-              'http://meteoriticalsociety.org/','The Meteoritical Society,'),
-              ' including information on the characteristics below:'),
+        'https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh',
+        'this data'),' aggregated by ',tags$a(href=
+        'http://meteoriticalsociety.org/','The Meteoritical Society,'),
+        ' including information on the characteristics below:'),
        
        tags$h3('Meteorite sites'),
        tags$p('Check out a map of where meterorites where found across the globe.'),
        
        tags$h3('Fell vs. found'),
        tags$p('Meterorites can be classified on whether or not a person saw their 
-              descent to Earth.  A meteorite that someone witnessed falling to Earth 
-              and then successfully tracked down is classified as a ',tags$em('fall'),
-              'or ',tags$em('fell'),'.  One that was determined to be a meteorite by 
-              examination of its properties is classified as ',tags$em('found.'),' 
-              See ',tags$a(href=
-              'https://en.wikipedia.org/wiki/Meteorite_fall','Wikipedia'),' for 
-              more.'),
+        descent to Earth.  A meteorite that someone witnessed falling to Earth 
+        and then successfully tracked down is classified as a ',tags$em('fall'),
+        'or ',tags$em('fell'),'.  One that was determined to be a meteorite by 
+        examination of its properties is classified as ',tags$em('found.'),' 
+        See ',tags$a(href=
+        'https://en.wikipedia.org/wiki/Meteorite_fall','Wikipedia'),' for 
+        more.'),
        
        tags$h3('Meteorite categorization'),
        tags$p('Meteorites are also classified by their physical, chemical, isotopic, 
-              and mineralogical properties, with the goal of grouping them ultimately 
-              by their origin (rocks from the same source should be made of similar 
-              stuff).  There are several taxonomies for classifying meterorites.  
-              According to ',tags$a(href=
-              'https://www.lpi.usra.edu/meteor/notes.php?note=6','the Meteoritical 
-              Society'),'website, the data here adheres to the following:'),
+        and mineralogical properties, with the goal of grouping them ultimately 
+        by their origin (rocks from the same source should be made of similar 
+        stuff).  There are several taxonomies for classifying meterorites.  
+        According to ',tags$a(href=
+        'https://www.lpi.usra.edu/meteor/notes.php?note=6','the Meteoritical 
+        Society'),'website, the data here adheres to the following:'),
        tags$blockquote('If the meteorite was published in both the Catalogue of 
-                       Meteorites and MetBase (see columns NHMCat and MetBase), both 
-                       classifications will appear if they do not agree. If the 
-                       meteorite was just published in one of these sources, the 
-                       classification from that source will be listed. If the 
-                       meteorite was published in neither, the classification comes 
-                       from the Meteoritical Bulletin (approved names) or from 
-                       unreviewed reports (provisional names).'),
+         Meteorites and MetBase (see columns NHMCat and MetBase), both 
+         classifications will appear if they do not agree. If the 
+         meteorite was just published in one of these sources, the 
+         classification from that source will be listed. If the 
+         meteorite was published in neither, the classification comes 
+         from the Meteoritical Bulletin (approved names) or from 
+         unreviewed reports (provisional names).'),
        tags$p('You can read more about the classification of meteorites on ',
-              tags$a(href='https://en.wikipedia.org/wiki/Meteorite_classification',
-              'Wikipedia.')),
+        tags$a(href='https://en.wikipedia.org/wiki/Meteorite_classification',
+        'Wikipedia.')),
        tags$h3('Meteorite mass'),
        tags$p('Meteorite masses in this dataset are in grams.  A note on masses 
-              from',tags$a(href='https://www.lpi.usra.edu/meteor/notes.php?note=16',
-              'the Meteoritical Society'),' website:',tags$blockquote('Masses are 
-              taken from the Catalogue of Meteorites, MetBase, and/or the Meteoritical 
-              Bulletin. In most cases, they represent the total known weight of the 
-              meteorite. The masses shown here should not be considered as authoritative, 
-              and may be rounded off.'))
+        from',tags$a(href='https://www.lpi.usra.edu/meteor/notes.php?note=16',
+        'the Meteoritical Society'),' website:',tags$blockquote('Masses are 
+        taken from the Catalogue of Meteorites, MetBase, and/or the Meteoritical 
+        Bulletin. In most cases, they represent the total known weight of the 
+        meteorite. The masses shown here should not be considered as authoritative, 
+        and may be rounded off.'))
       ) # close div
     ))
     ), #close Learn tab
