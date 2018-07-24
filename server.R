@@ -157,44 +157,6 @@ server = function(input, output, session){
   ##### PLOTS #####
   
   ##### Mass Plot #####
-  
-  # m_data_fell = reactive({
-  #   if(input$m_ff == "Found Only"){
-  #     return(filter(meteorites, fall != "Fell", fall != "Found"))
-  #   }
-  #   if(input$m_class == "Any"){
-  #     filter(meteorites, fall == "Fell", year >= input$m_year[1],
-  #            year <= input$m_year[2]) %>%
-  #     select(., mass, fall)}
-  #   else{
-  #     filter(meteorites, fall == "Fell", year >= input$m_year[1], 
-  #            year <= input$m_year[2], class == input$m_class) %>%
-  #     select(., mass, fall)}
-  # })
-  # 
-  # m_data_found = reactive({
-  #   if(input$m_ff == "Fell Only"){
-  #     return(filter(meteorites, fall != "Fell", fall != "Found"))
-  #   }
-  #   if(input$m_class == "Any"){
-  #     filter(meteorites, fall == "Found", year >= input$m_year[1],
-  #            year <= input$m_year[2]) %>%
-  #     select(., mass, fall)}
-  #   else{
-  #     filter(meteorites,fall == "Found", year >= input$m_year[1],
-  #            year <= input$m_year[2], class == input$m_class) %>%
-  #       select(., mass, fall)}
-  # })
-  
-  # m_data = reactive({
-  #   filter(meteorites,
-  #          year >= input$m_year[1],
-  #          year <= input$m_year[2],
-  #          fall %in% f_switch(input$m_ff),
-  #          class %in% class_switch(input$m_class),
-  #          country %in% country_switch(input$m_country))
-  # })
-  
   sub_m_data = reactive({
     filter(meteorites, 
            year >= input$m_year[1],
@@ -291,68 +253,39 @@ server = function(input, output, session){
   })
   
   ##### Year Plot #####
-
-  # y_data = reactive({
-  #   if(input$y_class == "Any"){
-  #     filter(meteorites, 
-  #            fall %in% f_switch(input$y_ff),
-  #            mass >= input$y_mass[1],
-  #            mass <= input$y_mass[2]) %>%
-  #       select(., year, fall)
-  #   }
-  #   else{
-  #     filter(meteorites, 
-  #            fall %in% f_switch(input$y_ff), 
-  #            mass >= input$y_mass[1],
-  #            mass <= input$y_mass[2],
-  #            class == input$y_class) %>%
-  #       select(., year, fall)
-  #   }
-  # })
+  sub_y_data = reactive({
+    filter(meteorites, 
+           mass >= input$y_mass[1],
+           mass <= input$y_mass[2])
+  })
+  
   y_data_fell = reactive({
     if(input$y_ff == "Found Only"){
       return(filter(meteorites, fall != "Fell", fall != "Found"))
     }
-    if(input$y_class == "Any"){
-      filter(meteorites, fall == "Fell", 
-             mass >= input$y_mass[1],
-             mass <= input$y_mass[2]) %>%
-        select(., year, fall)}
     else{
-      filter(meteorites, fall == "Fell", 
-             mass >= input$y_mass[1], 
-             mass <= input$y_mass[2], 
-             class == input$y_class) %>%
-        select(., year, fall)}
+      filter(meteorites,
+             fall == "Fell",
+             mass >= input$y_mass[1],
+             mass <= input$y_mass[2],
+             class %in% class_switch(input$y_class),
+             country %in% country_switch(input$y_country))
+    }
   })
   
   y_data_found = reactive({
     if(input$y_ff == "Fell Only"){
       return(filter(meteorites, fall != "Fell", fall != "Found"))
     }
-    if(input$y_class == "Any"){
-      filter(meteorites, 
-             fall == "Found", 
-             mass >= input$y_mass[1],
-             mass <= input$y_mass[2]) %>%
-        select(., year, fall)}
     else{
-      filter(meteorites,fall == "Found", 
+      filter(meteorites,
+             fall == "Found",
              mass >= input$y_mass[1],
-             mass <= input$y_mass[2], 
-             class == input$y_class) %>%
-        select(., year, fall)}
+             mass <= input$y_mass[2],
+             class %in% class_switch(input$y_class),
+             country %in% country_switch(input$y_country))
+    }
   })
-  
-  # output$y_plot <- renderPlotly({
-  #   p = plot_ly(x = y_data()$year, type = "histogram", autobinx = T,
-  #               xbins = list(start = 0, end = 13000), marker = list(
-  #                 color = toRGB("#DD5600", 0.8)))
-  #   p %>%
-  #     config(displayModeBar = F, showLink = F) %>%
-  #     layout(showlegend = F, barmode = "overlay", yaxis = list(title = "Count"),
-  #            xaxis = (list(title = "Year", showticklabels = T)))
-  # })
   
   output$y_plot <- renderPlotly({
     p = plot_ly(alpha = 0.8, type = "histogram", autobinx = F,
@@ -371,16 +304,41 @@ server = function(input, output, session){
     p
   })
   
+  # Update Fell / Found list
   observe({
-    sub = filter(meteorites, 
-                 fall %in% f_switch(input$y_ff), 
-                 mass >= input$y_mass[1],
-                 mass <= input$y_mass[2])
-    class_list = c("Any", as.vector(unique(sub$class[order(sub$class)])))
+    sub = filter(sub_y_data(),
+                 country %in% country_switch(input$y_country),
+                 class %in% class_switch(input$y_class))
+    fall_list = c("Fell or Found",
+                  paste(as.vector(unique(sub$fall[order(sub$fall)])),"Only"))
+    updateSelectInput(
+      session, "y_ff",
+      choices = fall_list,
+      selected = input$y_ff)
+  })
+  
+  # Update country list
+  observe({
+    sub = filter(sub_y_data(),
+                 fall %in% f_switch(input$y_ff),
+                 class %in% class_switch(input$y_class))
+    country_list = c("Any",as.vector(unique(sub$country[order(sub$country)])))
+    updateSelectInput(
+      session, "y_country",
+      choices = country_list,
+      selected = input$y_country)
+  })
+  
+  # Update class list
+  observe({
+    sub = filter(sub_y_data(),
+                 fall %in% f_switch(input$y_ff),
+                 country %in% country_switch(input$y_country))
+    class_list = c("Any",as.vector(unique(sub$class[order(sub$class)])))
     updateSelectInput(
       session, "y_class",
       choices = class_list,
-      selected = class_list[1])
+      selected = input$y_class)
   })
   
   # Counts
