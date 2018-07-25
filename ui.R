@@ -15,7 +15,7 @@ ui <- fluidPage(
         tags$div(class = "body", checked = NA,
                  tags$p("Learn about meteorites using data from the ",
                  tags$a(href=
-                 'https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh',
+           'https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh',
                  'NASA Open Data Portal.'))),
         br())
       ),
@@ -58,10 +58,12 @@ ui <- fluidPage(
        # Add a row for the widgets
        fluidRow(
          column(3, sliderInput("mass_range", label = h3("Mass (g)"), min = 0, 
-                               max = 13000, value = c(0, 13000))),
+                               max = 5000000, value = c(0, 5000000), 
+                               ticks = FALSE)),
          
          column(3, sliderInput("year_range", label = h3("Year"), min = 300, 
-                               max = 2013, value = c(300, 2013))),
+                               max = 2013, value = c(300, 2013),
+                               ticks = FALSE)),
          
          column(2, selectInput("fall_found", label = h3("Fell or Found"),
                                 choices = list("Fell or Found",
@@ -104,14 +106,20 @@ ui <- fluidPage(
                                                   "Found Only"), 
                                    selected = "Fell or Found"),
                        sliderInput("m_year", label = h3("Year"), min = 300, 
-                                      max = 2013, value = c(300, 2013)),
+                                   max = 2013, value = c(300, 2013),
+                                   ticks = FALSE),
                        textOutput("mass_counts")
                        ), #close column
                 #Plot
                 column(8, htmltools::div(style = "display:inline-block",
                                          plotlyOutput("m_plot", width = "auto", 
-                                                      height = "auto"))))
-                ), #close column
+                                                      height = "auto")))),
+                br(),
+                fluidRow(
+                  column(12,
+                    tags$div(tags$p("*Note: 2.47% of meteorites exhibit a mass above 
+                    20kg and are not visible on this histogram."))))
+                ), 
 
        # Year
        tabPanel("Year",
@@ -132,7 +140,8 @@ ui <- fluidPage(
                                                    "Found Only"), 
                                     selected = "Fell or Found"),
                        sliderInput("y_mass", label = h3("Mass (g)"), min = 0, 
-                                   max = 13000, value = c(0, 13000)),
+                                   max = 5000000, value = c(0, 5000000),
+                                   ticks = FALSE),
                        textOutput("year_counts")),
                 column(8,htmltools::div(style = "display:inline-block", 
                                plotlyOutput("y_plot", width = "auto", height = 

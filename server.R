@@ -153,6 +153,21 @@ server = function(input, output, session){
   observeEvent(input$country, {
     redraw()
   })
+  
+  observeEvent(input$mymap_zoom, {
+    if(is.null(input$mymap_zoom) == FALSE){
+      if(input$mymap_zoom >= max_cluster_zoom){ 
+        leafletProxy("mymap", data = filtered.data()) %>%
+          clearControls() %>%           
+          addLegend("bottomright", pal = factpal, values = ~fall, 
+                    title = "Fall Status",
+                    opacity = 1)}
+      else{
+        leafletProxy("mymap", data = filtered.data()) %>%
+          clearControls()
+      }
+    }
+    })
  
   ##### PLOTS #####
   
@@ -193,7 +208,7 @@ server = function(input, output, session){
   
   output$m_plot <- renderPlotly({
     p = plot_ly(alpha = 0.8, type = "histogram", autobinx = F,
-                xbins = list(start = 0, end = 13000, size = 200)) %>%
+                xbins = list(start = 0, end = 20000, size = 200)) %>%
       config(displayModeBar = F, showLink = F) %>%
       layout(showlegend = T, barmode = "overlay", 
              yaxis = list(title = "Count"),
@@ -351,16 +366,18 @@ server = function(input, output, session){
   ##### Class Table #####
   
   output$c_table = DT::renderDataTable({ c_summary },colnames = 
-        c("Class", "Average Mass (g)", "Count Fell","Count Found",
-          "Total Count", "Percent of All Meteorites"), 
+        c("Class", "Average Mass (g)", "Total Mass (g)",
+          "Count Fell","Count Found", "Total Count", 
+          "Percent of All Meteorites"), 
         options = list(pageLength = 15,
         columnDefs = list(list(className = 'dt-right', targets = c(2)))))
   
   ##### Country Table #####
   
   output$country_table = DT::renderDataTable({ country_summary },colnames = 
-        c("Country", "Average Mass (g)", "Count Fell","Count Found",
-          "Total Count", "Percent of All Meteorites"), 
+        c("Country", "Average Mass (g)","Total Mass (g)",
+          "Count Fell","Count Found","Total Count", 
+          "Percent of All Meteorites"), 
         options = list(pageLength = 15,
         columnDefs = list(list(className = 'dt-right', targets = c(2)))))
   
