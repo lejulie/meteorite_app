@@ -25,10 +25,12 @@ country_summary = select(country_summary, -X)
 
 ##### GLOBAL VARS #####
 
-# Parameters for the map
+# Parameters for maps/charts
 initial_zoom = 1
 max_cluster_zoom = 4
 circle_radius = 2
+color_found = "#008148" # green
+color_fell  = "#DD5600"  # orange
 
 # Initial list of classes
 class_list_1 = c("Any",

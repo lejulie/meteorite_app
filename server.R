@@ -74,7 +74,7 @@ server = function(input, output, session){
   })
   
   # Color palette
-  factpal = colorFactor(c("red","blue"), c("Fell","Found"))
+  factpal = colorFactor(c(color_fell,color_found), c("Fell","Found"))
   
   # Map
   output$mymap = renderLeaflet({
@@ -86,7 +86,7 @@ server = function(input, output, session){
         radius = circle_radius,
         color = ~factpal(fall),
         stroke = FALSE,
-        fillOpacity = 0.5,
+        fillOpacity = 0.8,
         clusterOptions = markerClusterOptions(disableClusteringAtZoom =
                                                 max_cluster_zoom,
                                               spiderfyOnMaxZoom = FALSE)) %>%
@@ -112,7 +112,7 @@ server = function(input, output, session){
         radius = circle_radius,
         color = ~factpal(fall),
         stroke = FALSE,
-        fillOpacity = 0.5,
+        fillOpacity = 0.8,
         clusterOptions = markerClusterOptions(disableClusteringAtZoom =
                                                 max_cluster_zoom,
                                               spiderfyOnMaxZoom = FALSE))
@@ -216,10 +216,10 @@ server = function(input, output, session){
     
     if(nrow(m_data_found())>0){
       p = p %>% add_histogram(x = m_data_found()$mass, name = "Found",
-                              marker = list(color = toRGB("#73A839", 0.6)))}
+                              marker = list(color = toRGB(color_found, 0.6)))}
     if(nrow(m_data_fell())>0){
       p = p %>% add_histogram(x = m_data_fell()$mass, name = "Fell",
-                              marker = list(color = toRGB("#2FA4E7", 0.8)))}
+                              marker = list(color = toRGB(color_fell, 0.6)))}
     p
   })
   
@@ -312,10 +312,10 @@ server = function(input, output, session){
     
     if(nrow(y_data_found())>0){
       p = p %>% add_histogram(x = y_data_found()$year, name = "Found",
-                              marker = list(color = toRGB("#73A839", 0.6)))}
+                              marker = list(color = toRGB(color_found, 0.6)))}
     if(nrow(y_data_fell())>0){
       p = p %>% add_histogram(x = y_data_fell()$year, name = "Fell",
-                              marker = list(color = toRGB("#2FA4E7", 0.8)))}
+                              marker = list(color = toRGB(color_fell, 0.6)))}
     p
   })
   
