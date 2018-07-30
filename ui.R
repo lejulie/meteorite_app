@@ -49,7 +49,7 @@ ui <- fluidPage(
        # Add a row for the map
        fluidRow(
          column(12,
-                leafletOutput("mymap")
+                leafletOutput("mymap", height = 500)
          )
        ),
        
