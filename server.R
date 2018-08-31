@@ -12,7 +12,6 @@ server = function(input, output, session){
   })
   
   ##### MAP #####
-  
   # Reactive expression for widgets
   filtered.data = reactive({
     filter(meteorites,
@@ -170,7 +169,6 @@ server = function(input, output, session){
     })
  
   ##### PLOTS #####
-  
   ##### Mass Plot #####
   sub_m_data = reactive({
     filter(meteorites, 
@@ -223,7 +221,7 @@ server = function(input, output, session){
     p
   })
   
-  # Update Fell / Found list
+  # Update fell / found list
   observe({
     sub = filter(sub_m_data(),
                  country %in% country_switch(input$m_country),

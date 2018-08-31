@@ -214,7 +214,7 @@ ui <- fluidPage(
        tags$p('Meterorites can be classified on whether or not a person saw their 
         descent to Earth.  A meteorite that someone witnessed falling to Earth 
         and then successfully tracked down is classified as ',tags$em('fall'),
-        'or ',tags$em('fell'),'.  One that was determined to be a meteorite by 
+        'or ',tags$em('fell.'),'  One that was determined to be a meteorite by 
         examination of its properties is classified as ',tags$em('found.'),' 
         See ',tags$a(href=
         'https://en.wikipedia.org/wiki/Meteorite_fall','Wikipedia'),' for 
@@ -239,6 +239,7 @@ ui <- fluidPage(
        tags$p('You can read more about the classification of meteorites on ',
         tags$a(href='https://en.wikipedia.org/wiki/Meteorite_classification',
         'Wikipedia.')),
+       
        tags$h3('Meteorite mass'),
        tags$p('Meteorite masses in this dataset are in grams.  A note on masses 
         from',tags$a(href='https://www.lpi.usra.edu/meteor/notes.php?note=16',
